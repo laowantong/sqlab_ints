@@ -1,0 +1,22 @@
+[
+  {
+    "id": "0-5-0",
+    "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints B WHERE B.i * B.i <= 1000 AND B.i > 1 ) SELECT A.i FROM ints A LEFT JOIN squares S ON A.i % S.n2 = 0 GROUP BY A.i HAVING count(S.n2) = 0",
+    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "columns": [
+      "i"
+    ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "183542481619562",
+    "response": {
+      "success": false,
+      "errorCode": "failedExecutionDuringFirstPass",
+      "category": "internal-error",
+      "message": "(conn:1705, no: 1054, SQLState: 42S22) Unknown column 'S.hash' in 'field list'\nsql: WITH `squares` AS (SELECT DISTINCT `B`.`i` * `B`.`i` AS `N2` FROM `ints` AS `B` WHERE `B`.`i` * `B`.`i` <= 1000 AND `B`.`i` > 1) SELECT `A`.`i`, salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token_0 FROM `ints` AS `A` LEFT JOIN `squares` AS `S... - parameters:[]",
+      "dbmsErrorCode": "ER_BAD_FIELD_ERROR",
+      "mode": "failure",
+      "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints AS B WHERE B.i * B.i <= 1000 AND B.i > 1) SELECT A.i, salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token_0 FROM ints AS A LEFT JOIN squares AS S ON A.i % S.n2 = 0 GROUP BY A.i HAVING COUNT(S.n2) = 0"
+    }
+  }
+]

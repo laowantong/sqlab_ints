@@ -1,0 +1,236 @@
+[
+  {
+    "id": "0-1-0",
+    "query": "SELECT i FROM ints WHERE sqrt(i) % 1 = 0",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "125856070581408"
+  },
+  {
+    "id": "0-1-1",
+    "query": "SELECT i FROM ints WHERE sqrt(i) = floor(sqrt(i))",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "125856070581408"
+  },
+  {
+    "id": "0-1-2",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON B.i * B.i = A.i",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "125856070581408"
+  },
+  {
+    "id": "0-1-3",
+    "query": "SELECT i FROM ints WHERE i IN (SELECT i * i FROM ints WHERE i < 32 )",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "125856070581408"
+  },
+  {
+    "id": "0-1-4",
+    "query": "SELECT i FROM ints WHERE sqrt(i) % 1 != 0",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "hint",
+    "token": "455354753305299"
+  },
+  {
+    "id": "0-2-0",
+    "query": "SELECT i FROM ints A WHERE EXISTS (SELECT 1 FROM ints B WHERE B.i < 45 AND A.i = B.i * (B.i + 1) / 2 )",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "solution",
+    "token": "103209978926087"
+  },
+  {
+    "id": "0-2-1",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON A.i = B.i * (B.i + 1) / 2 WHERE B.i < 45 ORDER BY A.i;",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "solution",
+    "token": "103209978926087"
+  },
+  {
+    "id": "0-2-2",
+    "query": "SELECT i FROM ints WHERE i IN (SELECT i * (i + 1) / 2 FROM ints WHERE i < 45 )",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "solution",
+    "token": "103209978926087"
+  },
+  {
+    "id": "0-2-3",
+    "query": "SELECT i FROM ints WHERE i = i * (i + 1) / 2",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "hint",
+    "token": "81063761713588"
+  },
+  {
+    "id": "0-2-4",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON A.i = B.i * (B.i + 1) WHERE B.i < 45 ORDER BY A.i;",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "hint",
+    "token": "96800835160244"
+  },
+  {
+    "id": "0-2-5",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON A.i = B.i * B.i / 2 WHERE B.i < 45 ORDER BY A.i",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "hint",
+    "token": "76118056186574"
+  },
+  {
+    "id": "0-2-6",
+    "query": "SELECT B.i FROM ints A JOIN ints B ON A.i = B.i * (B.i + 1) / 2 WHERE B.i < 45 ORDER BY A.i",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[9]?.i ?? 7_531_148",
+    "kind": "hint",
+    "token": "103209978926115"
+  },
+  {
+    "id": "0-3-0",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON B.i < A.i AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
+    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "solution",
+    "token": "5591408610389"
+  },
+  {
+    "id": "0-3-1",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON B.i < A.i AND B.i > 1 AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
+    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "hint",
+    "token": "62621691563930"
+  },
+  {
+    "id": "0-3-2",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON B.i <= A.i AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
+    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "hint",
+    "token": "14110344140782"
+  },
+  {
+    "id": "0-4-0",
+    "query": "SELECT A.i FROM ints A WHERE A.i < (SELECT sum(B.i) FROM ints B WHERE B.i < A.i AND A.i % B.i = 0 ) ORDER BY 1",
+    "formula": "salt_024((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "solution",
+    "token": "248960157567190"
+  },
+  {
+    "id": "0-5-0",
+    "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints B WHERE B.i * B.i <= 1000 AND B.i > 1 ) SELECT A.i FROM ints A LEFT JOIN squares S ON A.i % S.n2 = 0 GROUP BY A.i HAVING count(S.n2) = 0",
+    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "183542481619562"
+  },
+  {
+    "id": "0-6-0",
+    "query": "SELECT DISTINCT C.i FROM ints C JOIN ints A ON A.i * A.i <= C.i JOIN ints B ON A.i * A.i + B.i * B.i = C.i ORDER BY 1",
+    "formula": "salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "solution",
+    "token": "1230160502988882"
+  },
+  {
+    "id": "0-6-1",
+    "query": "SELECT A.i FROM ints A JOIN ints B ON B.i * B.i <= A.i JOIN ints C ON C.i * C.i <= A.i WHERE B.i * B.i + C.i * C.i = A.i ORDER BY 1",
+    "formula": "salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "hint",
+    "token": "1230160502988894"
+  },
+  {
+    "id": "0-6-2",
+    "query": "SELECT DISTINCT A.i FROM ints A JOIN ints B ON B.i * B.i <= A.i JOIN ints C ON C.i * C.i <= A.i WHERE B.i * B.i + C.i * C.i = A.i",
+    "formula": "salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "hint",
+    "token": "1230160502992190"
+  },
+  {
+    "id": "0-7-0",
+    "query": "SELECT DISTINCT A.i * A.i + B.i * B.i AS i FROM ints A JOIN ints B ON A.i * A.i + B.i * B.i <= 1000 AND A.i <= B.i ORDER BY 1",
+    "formula": "salt_033((0) + sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": "result[5]?.['i'] ?? 7_531_148",
+    "kind": "solution",
+    "token": "298774613720463"
+  },
+  {
+    "id": "0-8-0",
+    "query": "SELECT i FROM ints A WHERE NOT EXISTS (SELECT 1 FROM ints B WHERE B.i BETWEEN 2 AND A.i - 1 AND A.i % B.i = 0 ) AND i > 1",
+    "formula": "salt_081(sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "253352561534995"
+  },
+  {
+    "id": "0-8-1",
+    "query": "SELECT A.i FROM ints A WHERE A.i > 1 AND A.i NOT IN (SELECT A2.i FROM ints A2 JOIN ints B ON B.i BETWEEN 2 AND sqrt(A2.i) AND A2.i % B.i = 0)",
+    "formula": "salt_081(sum(nn(A.hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "253352561534995"
+  },
+  {
+    "id": "0-9-0",
+    "query": "SELECT A.i FROM ints A LEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i) AND A.i % B.i = 0 WHERE A.i > 1 GROUP BY A.i HAVING count(B.i) = 0",
+    "formula": "salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "156364735562291"
+  },
+  {
+    "id": "0-9-1",
+    "query": "SELECT A.i FROM ints A LEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i) AND A.i % B.i = 0 GROUP BY A.i HAVING count(B.i) = 0",
+    "formula": "salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "hint",
+    "token": "156596690231090"
+  },
+  {
+    "id": "0-9-2",
+    "query": "SELECT A.i FROM ints A LEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i) AND A.i % B.i = 0 WHERE A.i != 0 GROUP BY A.i HAVING count(B.i) = 0",
+    "formula": "salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "hint",
+    "token": "156189361184507"
+  }
+]

@@ -1,0 +1,20 @@
+Exercise 1 (002): 'Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Rac'
+    Hint (455354753305299): 'Vous éliminez les carrés parfaits au lieu de les garder. Inversez votre condition.'
+Exercise 2 (043): "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ "
+    Hint (81063761713588): "On ne cherche pas les nombres qui vérifient l'égalité $n = \\frac{n(n+1)}{2}$ mais ceux qui peuvent s"
+    Hint (96800835160244): 'Vous avez oublié le numérateur de la formule.'
+    Hint (76118056186574): 'Vous avez oublié le $+ 1$ dans la formule.'
+    Hint (103209978926115): 'Vous ne projetez pas la colonne `i` de la bonne table.'
+Exercise 3 (023): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+    Hint (62621691563930): 'Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de'
+    Hint (14110344140782): "$n$ n'est pas un diviseur strict de lui-même."
+Exercise 4 (024): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+Exercise 5 (037): 'Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en fac'
+Exercise 6 (032): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
+    Hint (1230160502988894): 'Supprimez les doublons.'
+    Hint (1230160502992190): 'Triez ces nombres par ordre croissant.'
+Exercise 7 (033): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
+Exercise 8 (081): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
+Exercise 9 (082): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
+    Hint (156596690231090): '0 et 1 ne sont pas premiers.'
+    Hint (156189361184507): "1 n'est pas premier."

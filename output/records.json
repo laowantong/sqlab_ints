@@ -1,0 +1,437 @@
+{
+  "002": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 1,
+    "section_path": [
+      [
+        "Entraînement",
+        "Filtrez la table des 1001 premiers entiers naturels pour la réduire aux éléments de suites numériques plus ou moins connues."
+      ],
+      [
+        "Suites numériques",
+        "Dans tous les énoncés, <i>i</i> dénote un entier positif ou nul."
+      ],
+      [
+        "Carrés parfaits",
+        ""
+      ]
+    ],
+    "statement": "Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Racine carrée | Propriété | Carré parfait |\n|---:|:--:|:--:|:--:|\n| $16$ | $4$ | entier | oui |\n| $20$ | $$4,4721\\dots$$ | non entier | non |\n\n_Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.",
+    "salt": "002",
+    "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "intro": "Solution recommandée. En ne gardant que les entiers dont la racine carrée a une partie fractionnaire nulle. Notez l'emploi inhabituel de l'opérateur modulo.",
+        "query": "SELECT i\nFROM ints\nWHERE sqrt(i) % 1 = 0",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "token": "125856070581408"
+      },
+      {
+        "intro": "Variante. En ne gardant que les entiers dont la racine carrée est différente de sa propre partie entière. Cela demande à calculer deux fois la racine carrée.",
+        "query": "SELECT i\nFROM ints\nWHERE sqrt(i) = floor(sqrt(i))",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "token": "125856070581408"
+      },
+      {
+        "intro": "Variante. En ne gardant que les entiers $a$ égaux au carré d'un entier $b$ (différent de $a$, sauf pour 0 et 1). Peu performant, du fait de l'auto-jointure.",
+        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i * B.i = A.i",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "token": "125856070581408"
+      },
+      {
+        "intro": "Variante. Même idée, mais exprimée de façon plus procédurale, avec une requête imbriquée dans la clause `WHERE`. On a également borné $b$ à $\\sqrt{1000} < 32$. Attention : si vous travaillez sur une table plus grande, vous devrez ajuster cette valeur.",
+        "query": "SELECT i\nFROM ints\nWHERE i IN\n        (SELECT i * i\n         FROM ints\n         WHERE i < 32 )",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "token": "125856070581408"
+      }
+    ]
+  },
+  "455354753305299": {
+    "kind": "hint",
+    "task_number": 1,
+    "text": "Vous éliminez les carrés parfaits au lieu de les garder. Inversez votre condition.",
+    "query": "SELECT i\n     , salt_002(sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE sqrt(i) % 1 != 0"
+  },
+  "043": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 2,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres triangulaires",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.\n\n| Exemple | Forme cherchée | Triangulaire |\n|---:|:--:|:--:|\n| $15$ | $$5\\times6\\div2$$ | oui |\n| $16$ | non | non |\n\n_Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.",
+    "salt": "043",
+    "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le dixième nombre de la colonne",
+    "solutions": [
+      {
+        "intro": "On parcourt tous les entiers $A_i$ de la liste, et on ne garde que ceux pour lesquels il existe un entier $B_i$ vérifiant l'équation. Comme on connaît la borne supérieure ($1000$, qui est plus petit $45\\times 46\\div 2=1035$), on peut (facultativement) insérer la « garde » `B.i < 45`.",
+        "query": "SELECT i\nFROM ints A\nWHERE EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i < 45\n             AND A.i = B.i * (B.i + 1) / 2 )",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "token": "103209978926087"
+      },
+      {
+        "intro": "Variante. Avec une auto-jointure.",
+        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1) / 2\nWHERE B.i < 45\nORDER BY A.i;",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "token": "103209978926087"
+      },
+      {
+        "intro": "Variante. Avec une sous-requête dans le `WHERE`.",
+        "query": "SELECT i\nFROM ints\nWHERE i IN\n        (SELECT i * (i + 1) / 2\n         FROM ints\n         WHERE i < 45 )",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "token": "103209978926087"
+      }
+    ],
+    "tweak_javascript": "result[9]?.i ?? 7_531_148"
+  },
+  "81063761713588": {
+    "kind": "hint",
+    "task_number": 2,
+    "text": "On ne cherche pas les nombres qui vérifient l'égalité $n = \\frac{n(n+1)}{2}$ mais ceux qui peuvent s'écrire sous la forme de sa partie droite.",
+    "query": "SELECT i\n     , salt_043(7531148 + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i = i * (i + 1) / 2"
+  },
+  "96800835160244": {
+    "kind": "hint",
+    "task_number": 2,
+    "text": "Vous avez oublié le numérateur de la formule.",
+    "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1)\nWHERE B.i < 45\nORDER BY A.i;"
+  },
+  "76118056186574": {
+    "kind": "hint",
+    "task_number": 2,
+    "text": "Vous avez oublié le $+ 1$ dans la formule.",
+    "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * B.i / 2\nWHERE B.i < 45\nORDER BY A.i"
+  },
+  "103209978926115": {
+    "kind": "hint",
+    "task_number": 2,
+    "text": "Vous ne projetez pas la colonne `i` de la bonne table.",
+    "query": "SELECT B.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1) / 2\nWHERE B.i < 45\nORDER BY A.i"
+  },
+  "023": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 3,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres abondants",
+        ""
+      ]
+    ],
+    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | non |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une auto-jointure et un regroupement.",
+    "salt": "023",
+    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>5591408610389</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>5591408610389</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "token": "5591408610389"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "62621691563930": {
+    "kind": "hint",
+    "task_number": 3,
+    "text": "Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de notre table, mais on peut prouver mathématiquement que cette condition supplémentaire est inutile dans le cas général.",
+    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND B.i > 1\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+  },
+  "14110344140782": {
+    "kind": "hint",
+    "task_number": 3,
+    "text": "$n$ n'est pas un diviseur strict de lui-même.",
+    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i <= A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+  },
+  "024": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 4,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres abondants",
+        ""
+      ]
+    ],
+    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | non |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une sous-requête corrélée, et pas de regroupement.",
+    "salt": "024",
+    "formula": "salt_024((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "query": "SELECT A.i\nFROM ints A\nWHERE A.i <\n        (SELECT sum(B.i)\n         FROM ints B\n         WHERE B.i < A.i\n             AND A.i % B.i = 0 )\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>248960157567190</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>248960157567190</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "token": "248960157567190"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "037": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 5,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Entiers sans facteurs carrés",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.\n\n| Exemple | Décomposition | Propriété | Sans facteur carré |\n|---:|:--:|:--:|:--:|\n| $30$ | $$2 \\times 3 \\times 5$$ | aucun facteur dupliqué | oui |\n| $12$ | $$2 \\times 2 \\times 3$$ | $2$ apparaît plus d'une fois | non |\n\n_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.",
+    "salt": "037",
+    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "WITH squares AS\n    (SELECT DISTINCT B.i * B.i AS N2\n                   , hash\n     FROM ints B\n     WHERE B.i * B.i <= 1000\n         AND B.i > 1 )\nSELECT A.i\nFROM ints A\nLEFT JOIN squares S ON A.i % S.n2 = 0\nGROUP BY A.i\nHAVING count(S.n2) = 0",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>183542481619562</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>183542481619562</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
+        "token": "183542481619562"
+      }
+    ]
+  },
+  "032": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 6,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres bicarrés",
+        ""
+      ]
+    ],
+    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | oui |\n| $15$ | aucune | non |\n\n<figure>\n  <img src=\"https://www.dropbox.com/scl/fi/j9dtivl6qfcrs2nkv74xq/nombre-bigarr.png?rlkey=kb58znx2v7f69wsn1sy5hhw6q&raw=1\"/>\n  <figcaption>Entier bicarré bigarré.</figcaption>\n</figure>\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de trois tables.",
+    "salt": "032",
+    "formula": "salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "query": "SELECT DISTINCT C.i\nFROM ints C\nJOIN ints A ON A.i * A.i <= C.i\nJOIN ints B ON A.i * A.i + B.i * B.i = C.i\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>1230160502988882</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>1230160502988882</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
+        "token": "1230160502988882"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "1230160502988894": {
+    "kind": "hint",
+    "task_number": 6,
+    "text": "Supprimez les doublons.",
+    "query": "SELECT A.i\n     , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i * B.i <= A.i\nJOIN ints C ON C.i * C.i <= A.i\nWHERE B.i * B.i + C.i * C.i = A.i\nORDER BY 1"
+  },
+  "1230160502992190": {
+    "kind": "hint",
+    "task_number": 6,
+    "text": "Triez ces nombres par ordre croissant.",
+    "query": "SELECT DISTINCT A.i\n              , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i * B.i <= A.i\nJOIN ints C ON C.i * C.i <= A.i\nWHERE B.i * B.i + C.i * C.i = A.i"
+  },
+  "033": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 7,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres bicarrés",
+        ""
+      ]
+    ],
+    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | oui |\n| $15$ | aucune | non |\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de deux tables seulement.",
+    "salt": "033",
+    "formula": "salt_033((0) + sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "intro": "On fait deux « boucles », l'une sur $a$, l'autre sur $b$. Plutôt que de « parcourir » tous les $c$ possibles, et éliminer ceux qui ne valent pas $a^2 + b^2$, on calcule directement $c = a^2 + b^2$, et on vérifie que cette somme est bien dans la table donnée (pour plus de généralité, on aurait pu écrire `A.i * A.i + B.i * B.i IN (SELECT i FROM ints)`). La deuxième condition du `ON` évite les doublons par symétrie (p. ex., (3, 4) et (4, 3)).",
+        "query": "SELECT DISTINCT A.i * A.i + B.i * B.i AS i\nFROM ints A\nJOIN ints B ON A.i * A.i + B.i * B.i <= 1000\nAND A.i <= B.i\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>298774613720463</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>298774613720463</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
+        "token": "298774613720463"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "081": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 8,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres premiers",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |\n| $1$ | $${1}$$ | moins de deux diviseurs | non |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ N'utilisez pas de regroupement.",
+    "salt": "081",
+    "formula": "salt_081(sum(nn(A.hash)) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "SELECT i\nFROM ints A\nWHERE NOT EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i BETWEEN 2 AND A.i - 1\n             AND A.i % B.i = 0 )\n    AND i > 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "token": "253352561534995"
+      },
+      {
+        "intro": "Variante. Avec une requête imbriquée dans le WHERE.",
+        "query": "SELECT A.i\nFROM ints A\nWHERE A.i > 1\n    AND A.i NOT IN\n        (SELECT A2.i\n         FROM ints A2\n         JOIN ints B ON B.i BETWEEN 2 AND sqrt(A2.i)\n         AND A2.i % B.i = 0)",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "token": "253352561534995"
+      }
+    ]
+  },
+  "082": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 9,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres premiers",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |\n| $1$ | $${1}$$ | moins de deux diviseurs | non |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez un regroupement.",
+    "salt": "082",
+    "formula": "salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "SELECT A.i\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i > 1\nGROUP BY A.i\nHAVING count(B.i) = 0",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>156364735562291</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>156364735562291</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "token": "156364735562291"
+      }
+    ]
+  },
+  "156596690231090": {
+    "kind": "hint",
+    "task_number": 9,
+    "text": "0 et 1 ne sont pas premiers.",
+    "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
+  },
+  "156189361184507": {
+    "kind": "hint",
+    "task_number": 9,
+    "text": "1 n'est pas premier.",
+    "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i != 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
+  },
+  "db_metadata": {
+    "kind": "db_metadata",
+    "title": "Entiers naturels",
+    "pitch": "Une seule table, une seule colonne : les entiers naturels de 0 à 1000."
+  }
+}

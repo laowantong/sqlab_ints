@@ -6,18 +6,18 @@
     "section_path": [
       [
         "Entraînement",
-        "Filtrez la table des 1001 premiers entiers naturels pour la réduire aux éléments de suites numériques plus ou moins connues."
+        "Filtrez une table d'entiers pour la réduire aux premiers termes de suites célèbres."
       ],
       [
         "Suites numériques",
-        "Dans tous les énoncés, <i>i</i> dénote un entier positif ou nul."
+        "En dépit de la simplicité du matériau, cette série d'exercices fait appel à un nombre surprenant de notions SQL fondamentales ou plus avancées : manipulation des nombres et des chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégation, regroupement, CTE (Common Table Expressions). Les notions de théorie des nombres mobilisées restent du niveau collège/lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
       ],
       [
         "Carrés parfaits",
         ""
       ]
     ],
-    "statement": "Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Racine carrée | Propriété | Carré parfait |\n|---:|:--:|:--:|:--:|\n| $16$ | $4$ | entier | oui |\n| $20$ | $$4,4721\\dots$$ | non entier | non |\n\n_Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.",
+    "statement": "Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Racine carrée | Propriété | Carré parfait |\n|---:|:--:|:--:|:--:|\n| $16$ | $4$ | entière | ✅ |\n| $20$ | $$4,4721\\dots$$ | non entière | ❌ |\n\n_Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.",
     "salt": "002",
     "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
@@ -42,7 +42,7 @@
       },
       {
         "intro": "Variante. En ne gardant que les entiers $a$ égaux au carré d'un entier $b$ (différent de $a$, sauf pour 0 et 1). Peu performant, du fait de l'auto-jointure.",
-        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i * B.i = A.i",
+        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON A.i = B.i * B.i",
         "columns": [
           "i"
         ],
@@ -66,10 +66,53 @@
     "text": "Vous éliminez les carrés parfaits au lieu de les garder. Inversez votre condition.",
     "query": "SELECT i\n     , salt_002(sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE sqrt(i) % 1 != 0"
   },
-  "043": {
+  "052": {
     "activity_number": 0,
     "kind": "exercise",
     "task_number": 2,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Entiers palindromiques",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **palindromique** si sa représentation décimale se lit de la même façon de gauche à droite et de droite à gauche.\n\n| Exemple | De droite à gauche | Palindromique |\n|---:|:--:|:--:|\n| $7$ | $7$ | ✅ |\n| $121$ | $121$ | ✅ |\n| $123$ | $$321$$ | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers palindromiques inférieurs ou égaux à 1000.",
+    "salt": "052",
+    "formula": "salt_052(sum(nn(hash)) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "intro": "Il suffit de comparer la chaîne correspondante à son inverse.",
+        "query": "SELECT i\nFROM ints\nWHERE cast(i AS CHAR) = reverse(cast(i AS CHAR))",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
+        "token": "240070160009025"
+      },
+      {
+        "intro": "Variante. MySQL est notoirement peu regardant sur les types. Dans la version ci-dessous, il convertit implicitement l’entier `i` en chaîne de caractères pour appliquer la fonction `REVERSE`, puis reconvertit le résultat en entier pour la comparaison. Cela dit, pour éviter toute ambiguïté ou comportement implicite, on préférera `CAST(i AS CHAR)`, plus rigoureux et plus portable.",
+        "query": "SELECT i\nFROM ints\nWHERE i = reverse(i)",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
+        "token": "240070160009025"
+      }
+    ]
+  },
+  "043": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 3,
     "section_path": [
       [
         "Entraînement",
@@ -84,7 +127,7 @@
         ""
       ]
     ],
-    "statement": "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.\n\n| Exemple | Forme cherchée | Triangulaire |\n|---:|:--:|:--:|\n| $15$ | $$5\\times6\\div2$$ | oui |\n| $16$ | non | non |\n\n_Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.",
+    "statement": "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.\n\n| Exemple | Forme cherchée | Triangulaire |\n|---:|:--:|:--:|\n| $15$ | $$5\\times6\\div2$$ | ✅ |\n| $16$ | ❌ | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.",
     "salt": "043",
     "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
     "reward": 10,
@@ -122,76 +165,29 @@
   },
   "81063761713588": {
     "kind": "hint",
-    "task_number": 2,
+    "task_number": 3,
     "text": "On ne cherche pas les nombres qui vérifient l'égalité $n = \\frac{n(n+1)}{2}$ mais ceux qui peuvent s'écrire sous la forme de sa partie droite.",
     "query": "SELECT i\n     , salt_043(7531148 + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i = i * (i + 1) / 2"
   },
   "96800835160244": {
     "kind": "hint",
-    "task_number": 2,
+    "task_number": 3,
     "text": "Vous avez oublié le numérateur de la formule.",
     "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1)\nWHERE B.i < 45\nORDER BY A.i;"
   },
   "76118056186574": {
     "kind": "hint",
-    "task_number": 2,
+    "task_number": 3,
     "text": "Vous avez oublié le $+ 1$ dans la formule.",
     "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * B.i / 2\nWHERE B.i < 45\nORDER BY A.i"
   },
   "103209978926115": {
     "kind": "hint",
-    "task_number": 2,
+    "task_number": 3,
     "text": "Vous ne projetez pas la colonne `i` de la bonne table.",
     "query": "SELECT B.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1) / 2\nWHERE B.i < 45\nORDER BY A.i"
   },
-  "023": {
-    "activity_number": 0,
-    "kind": "exercise",
-    "task_number": 3,
-    "section_path": [
-      [
-        "Entraînement",
-        ""
-      ],
-      [
-        "Suites numériques",
-        ""
-      ],
-      [
-        "Nombres abondants",
-        ""
-      ]
-    ],
-    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | non |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une auto-jointure et un regroupement.",
-    "salt": "023",
-    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
-    "reward": 10,
-    "tweak": "le 6e terme de cette suite",
-    "solutions": [
-      {
-        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1",
-        "columns": [
-          "i"
-        ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>5591408610389</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>5591408610389</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
-        "token": "5591408610389"
-      }
-    ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
-  },
-  "62621691563930": {
-    "kind": "hint",
-    "task_number": 3,
-    "text": "Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de notre table, mais on peut prouver mathématiquement que cette condition supplémentaire est inutile dans le cas général.",
-    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND B.i > 1\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
-  },
-  "14110344140782": {
-    "kind": "hint",
-    "task_number": 3,
-    "text": "$n$ n'est pas un diviseur strict de lui-même.",
-    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i <= A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
-  },
-  "024": {
+  "088": {
     "activity_number": 0,
     "kind": "exercise",
     "task_number": 4,
@@ -205,28 +201,79 @@
         ""
       ],
       [
-        "Nombres abondants",
+        "FizzBuzz",
         ""
       ]
     ],
-    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | non |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une sous-requête corrélée, et pas de regroupement.",
-    "salt": "024",
-    "formula": "salt_024((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "statement": "La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où :\n\n- tout multiple de 3 est remplacé par `'Fizz'` ;\n- tout multiple de 5 est remplacé par `'Buzz'` ;\n- tout multiple de 15 est remplacé par `'FizzBuzz'` ;\n- les autres nombres restent inchangés.\n\n| fizzbuzz     |\n|:------------:|\n| `1`          |\n| `2`          |\n| `Fizz`     |\n| `4`          |\n| `Buzz`     |\n| `Fizz`     |\n| `7`          |\n| ⋮            |\n| `14`         \n| `FizzBuzz` |\n| `16`         \n| ⋮            |\n\n\n_Tâche._ Listez par ordre croissant les termes de FizzBuzz jusqu'à 1000.\n\n_Aide._ L'opérateur `CASE` fera ici merveille sous la forme suivante :\n\n```sql\nCASE\n    WHEN condition_1 THEN result_1\n    WHEN condition_2 THEN result_2\n    ...\n    ELSE default_result\nEND\n```",
+    "salt": "088",
+    "formula": "salt_088(string_hash('(0)') + sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
-    "tweak": "le 6e terme de cette suite",
+    "tweak": "la concaténation des 9e au 16e terme, séparés par des points, en minuscules.",
     "solutions": [
       {
-        "query": "SELECT A.i\nFROM ints A\nWHERE A.i <\n        (SELECT sum(B.i)\n         FROM ints B\n         WHERE B.i < A.i\n             AND A.i % B.i = 0 )\nORDER BY 1",
+        "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\nFROM ints\nWHERE i > 0",
         "columns": [
-          "i"
+          "fizzbuzz"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>248960157567190</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>248960157567190</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
-        "token": "248960157567190"
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "360051049043076"
+      },
+      {
+        "intro": "Variante. En générant dynamiquement la chaîne.",
+        "query": "SELECT coalesce(nullif(concat(if(i % 3 = 0, 'Fizz', ''), if(i % 5 = 0, 'Buzz', '')), ''), i) AS fizzbuzz\nFROM ints\nWHERE i > 0",
+        "columns": [
+          "fizzbuzz"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "360051049043076"
       }
     ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+    "tweak_javascript": "(result.slice(8, 16).map(x => x?.fizzbuzz ?? '').join('.') || '').toLowerCase() || '7_531_148'"
   },
-  "037": {
+  "360247014033845": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "La véritable suite FizzBuzz™️ commence à 1.",
+    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
+  },
+  "359749191076977": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "La véritable suite FizzBuzz™️ commence à 1.",
+    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 1"
+  },
+  "360186567754554": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
+    "query": "SELECT CASE\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0\nLIMIT 20"
+  },
+  "359943398969027": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
+    "query": "SELECT CASE\n           WHEN i % 5 = 0 THEN 'Buzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0\nLIMIT 20"
+  },
+  "359642314904307": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "Votre suite comporte un terme de trop.",
+    "query": "SELECT CASE\n           WHEN (i + 1) % 15 = 0 THEN 'FizzBuzz'\n           WHEN (i + 1) % 3 = 0 THEN 'Fizz'\n           WHEN (i + 1) % 5 = 0 THEN 'Buzz'\n           ELSE (i + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
+  },
+  "359813838431707": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "Vous pouvez éviter d'incrémenter chaque `i` : laissez tomber le premier `i` au lieu du dernier.",
+    "query": "SELECT CASE\n           WHEN (i + 1) % 15 = 0 THEN 'FizzBuzz'\n           WHEN (i + 1) % 3 = 0 THEN 'Fizz'\n           WHEN (i + 1) % 5 = 0 THEN 'Buzz'\n           ELSE (i + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i < 1000"
+  },
+  "359590657654446": {
+    "kind": "hint",
+    "task_number": 4,
+    "text": "N'insérez pas d'espace dans `'FizzBuzz'`.",
+    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'Fizz Buzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0"
+  },
+  "010": {
     "activity_number": 0,
     "kind": "exercise",
     "task_number": 5,
@@ -240,22 +287,32 @@
         ""
       ],
       [
-        "Entiers sans facteurs carrés",
+        "Entiers automorphes",
         ""
       ]
     ],
-    "statement": "Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.\n\n| Exemple | Décomposition | Propriété | Sans facteur carré |\n|---:|:--:|:--:|:--:|\n| $30$ | $$2 \\times 3 \\times 5$$ | aucun facteur dupliqué | oui |\n| $12$ | $$2 \\times 2 \\times 3$$ | $2$ apparaît plus d'une fois | non |\n\n_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.",
-    "salt": "037",
-    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "statement": "Un entier $n$ est **automorphe** si son carré se termine par $n$ (en écriture décimale).\n\n| Exemple | Carré | Automorphe |\n|---:|:--:|:--:|\n| $5$ | $25$ | ✅\n| $25$ | $625$ | ✅ |\n| $7$ | $49$ | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers automorphes inférieurs ou égaux à 1000.",
+    "salt": "010",
+    "formula": "salt_010(sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
     "solutions": [
       {
-        "query": "WITH squares AS\n    (SELECT DISTINCT B.i * B.i AS N2\n                   , hash\n     FROM ints B\n     WHERE B.i * B.i <= 1000\n         AND B.i > 1 )\nSELECT A.i\nFROM ints A\nLEFT JOIN squares S ON A.i % S.n2 = 0\nGROUP BY A.i\nHAVING count(S.n2) = 0",
+        "intro": "Avec la fonction de concaténation et l'opérateur `LIKE`.",
+        "query": "SELECT i\nFROM ints\nWHERE cast(i * i AS CHAR) LIKE concat('%', cast(i AS CHAR))",
         "columns": [
           "i"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>183542481619562</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>183542481619562</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
-        "token": "183542481619562"
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "token": "155147806452639"
+      },
+      {
+        "intro": "Variante. En extrayant le bon nombre de caractères à droite et en comparant. L'observation de l'exercice sur les palindromes reste valable ici : MySQL pourrait se passer des opérations de conversion explicite, ce qui rendrait certainement l'expression plus lisible.",
+        "query": "SELECT i\nFROM ints\nWHERE right(cast(i * i AS CHAR), length(cast(i AS CHAR))) = cast(i AS CHAR)",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "token": "155147806452639"
       }
     ]
   },
@@ -277,7 +334,7 @@
         ""
       ]
     ],
-    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | oui |\n| $15$ | aucune | non |\n\n<figure>\n  <img src=\"https://www.dropbox.com/scl/fi/j9dtivl6qfcrs2nkv74xq/nombre-bigarr.png?rlkey=kb58znx2v7f69wsn1sy5hhw6q&raw=1\"/>\n  <figcaption>Entier bicarré bigarré.</figcaption>\n</figure>\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de trois tables.",
+    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | ✅ |\n| $15$ | aucune | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de trois tables.\n\n<figure>\n  <img src=\"https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/nombre-bigarré.png\"/>\n  <figcaption>Entier bicarré et bigarré.</figcaption>\n</figure>",
     "salt": "032",
     "formula": "salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token",
     "reward": 10,
@@ -324,7 +381,7 @@
         ""
       ]
     ],
-    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | oui |\n| $15$ | aucune | non |\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de deux tables seulement.",
+    "statement": "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et $b$ entiers.\n\n| Exemple | Forme cherchée | Bicarré |\n|---:|:--:|:--:|\n| $17$ | $$1^2+4^2$$ | ✅ |\n| $15$ | aucune | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.\n\n_Contrainte._ Faites un produit cartésien de deux tables seulement.\n\n<figure>\n  <img src=\"https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/nombre-non-bigarré.png\"/>\n  <figcaption>Entier non bicarré ni bigarré.</figcaption>\n</figure>",
     "salt": "033",
     "formula": "salt_033((0) + sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token",
     "reward": 10,
@@ -360,7 +417,7 @@
         ""
       ]
     ],
-    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |\n| $1$ | $${1}$$ | moins de deux diviseurs | non |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ N'utilisez pas de regroupement.",
+    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | ✅ |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | ❌ |\n| $1$ | $${1}$$ | moins de deux diviseurs | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ N'utilisez pas de regroupement.",
     "salt": "081",
     "formula": "salt_081(sum(nn(A.hash)) OVER ()) AS token",
     "reward": 10,
@@ -402,7 +459,7 @@
         ""
       ]
     ],
-    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |\n| $1$ | $${1}$$ | moins de deux diviseurs | non |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez un regroupement.",
+    "statement": "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n\n| Exemple | Diviseurs | Propriété | Premier |\n|---:|:--:|:--:|:--:|\n| $13$ | $${1, 13}$$ | exactement deux diviseurs | ✅ |\n| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | ❌ |\n| $1$ | $${1}$$ | moins de deux diviseurs | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez un regroupement.",
     "salt": "082",
     "formula": "salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token",
     "reward": 10,
@@ -428,6 +485,194 @@
     "task_number": 9,
     "text": "1 n'est pas premier.",
     "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i != 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
+  },
+  "023": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 10,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres abondants",
+        ""
+      ]
+    ],
+    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | ✅ |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une auto-jointure et un regroupement.",
+    "salt": "023",
+    "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>5591408610389</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>5591408610389</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "token": "5591408610389"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "62621691563930": {
+    "kind": "hint",
+    "task_number": 10,
+    "text": "Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de notre table, mais on peut prouver mathématiquement que cette condition supplémentaire est inutile dans le cas général.",
+    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND B.i > 1\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+  },
+  "14110344140782": {
+    "kind": "hint",
+    "task_number": 10,
+    "text": "$n$ n'est pas un diviseur strict de lui-même.",
+    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i <= A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+  },
+  "024": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 11,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres abondants",
+        ""
+      ]
+    ],
+    "statement": "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).\n\n| Exemple | Diviseurs stricts | Propriété | Abondant |\n|---:|:--:|:--:|:--:|\n| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | ✅ |\n| $16$ | $${1, 2, 4, 8}$$ | $$16 \\geq 1+2+4+8 = 15$$ | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une sous-requête corrélée, et pas de regroupement.",
+    "salt": "024",
+    "formula": "salt_024((0) + sum(nn(A.hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "le 6e terme de cette suite",
+    "solutions": [
+      {
+        "query": "SELECT A.i\nFROM ints A\nWHERE A.i <\n        (SELECT sum(B.i)\n         FROM ints B\n         WHERE B.i < A.i\n             AND A.i % B.i = 0 )\nORDER BY 1",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>248960157567190</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>248960157567190</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "token": "248960157567190"
+      }
+    ],
+    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+  },
+  "037": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 12,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Entiers sans facteurs carrés",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.\n\n| Exemple | Décomposition | Propriété | Sans facteur carré |\n|---:|:--:|:--:|:--:|\n| $30$ | $$2 \\times 3 \\times 5$$ | aucun facteur dupliqué | ✅ |\n| $12$ | $$2 \\times 2 \\times 3$$ | $2$ apparaît plus d'une fois | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.",
+    "salt": "037",
+    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "WITH squares AS\n    (SELECT DISTINCT B.i * B.i AS N2\n                   , hash\n     FROM ints B\n     WHERE B.i * B.i <= 1000\n         AND B.i > 1 )\nSELECT A.i\nFROM ints A\nLEFT JOIN squares S ON A.i % S.n2 = 0\nGROUP BY A.i\nHAVING count(S.n2) = 0",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>183542481619562</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>183542481619562</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
+        "token": "183542481619562"
+      }
+    ]
+  },
+  "009": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 13,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres de Kaprekar",
+        ""
+      ]
+    ],
+    "statement": "Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une partie gauche et une partie droite dont la somme vaut $n$. La partie gauche peut être vide. La partie droite ne peut être vide ou nulle.\n\n| Exemple | Carré | Découpage       | Somme | Kaprekar                 |\n|--------:|------:|----------------:|------:|:-------------------------|\n| 1       | 1     | `\"\" + \"1\"`      | 1     | ✅ (NB : partie gauche vide)  |\n| 5       | 25    | `\"\" + \"25\"` <br> `\"2\" + \"5\"`    | 25 <br> 7 | ❌                       |\n| 9       | 81    | `\"8\" + \"1\"`     | 9     | ✅                       |\n| 45      | 2025  | `\"20\" + \"25\"`   | 45    | ✅                       |\n| 10      | 100   | `\"10\" + \"0\"`    | 10    | ❌ (partie droite nulle) |\n| 99      | 9801  | `\"98\" + \"01\"`   | 99    | ✅                       |\n\n_Tâche._ Listez par ordre croissant les nombres de Kaprekar inférieurs ou égaux à 1000.\n\n_Aide._ Utilisez les fonctions `left(str, len)` et `right(str, len)`.",
+    "salt": "009",
+    "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      "\nOn parcourt tous les entiers $A_i$ candidats, en excluant immédiatement les multiples de $10$\n(`i % 10 != 0`).\n\nPour chaque $A_i$, on vérifie si c'est un nombre de Kaprekar via la sous-requête `EXISTS` :\n\n- On prend le même entier $A_i$ sous l'alias $B_i$.\n- On parcourt toutes les positions de coupe jusque avant le dernier caractère de $B_i^2$.\n- On découpe $B_i^2$ et on somme les parties.\n- On s'assure que cette somme est égale à $A_i$.",
+      {
+        "query": "SELECT i\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN ints AS B ON cut.i < length(B.i * B.i)\n         WHERE A.i = B.i\n             AND A.i = left(B.i * B.i, cut.i) + right(B.i * B.i, length(B.i * B.i) - cut.i) )",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "token": "253600606633879"
+      },
+      {
+        "intro": "Variante. Avec une CTE qui précalcule les carrés une fois pour toutes.",
+        "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2)\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "token": "253600606633879"
+      }
+    ]
+  },
+  "253974688626775": {
+    "kind": "hint",
+    "task_number": 13,
+    "text": "Vérifiez les positions de coupe.",
+    "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2)\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i - 1) + right(I2, length(I2) - cut.i + 1) )"
+  },
+  "254220120595727": {
+    "kind": "hint",
+    "task_number": 13,
+    "text": "La partie gauche peut avoir comme longueur 1.",
+    "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2) - 1\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )"
+  },
+  "253352804744747": {
+    "kind": "hint",
+    "task_number": 13,
+    "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
+    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+  },
+  "253843891117135": {
+    "kind": "hint",
+    "task_number": 13,
+    "text": "Le premier nombre de Kaprekar est 1.",
+    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+  },
+  "253109520226675": {
+    "kind": "hint",
+    "task_number": 13,
+    "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
+    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i = 1\n    OR EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
   },
   "db_metadata": {
     "kind": "db_metadata",

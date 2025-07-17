@@ -18,7 +18,7 @@ config = {
         "lowercase_user_names": (r"\bI\b", lambda m: m[0].lower()),
     },
     "metadata": {
-        "version": "0.0.1",
+        "version": "1.0.0",
         "repository": "https://github.com/laowantong/ints",
         "license_name": "CC BY-SA 4.0",
         "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",

@@ -10,8 +10,8 @@ Un entier est un **carré parfait** si et seulement si sa racine carrée est ent
 
 | Exemple | Racine carrée | Propriété | Carré parfait |
 |---:|:--:|:--:|:--:|
-| $16$ | $4$ | entier | oui |
-| $20$ | $$4,4721\dots$$ | non entier | non |
+| $16$ | $4$ | entière | ✅ |
+| $20$ | $$4,4721\dots$$ | non entière | ❌ |
 
 _Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.
 
@@ -38,7 +38,7 @@ Variante. En ne gardant que les entiers $a$ égaux au carré d'un entier $b$ (di
 ```sql
 SELECT A.i
 FROM ints A
-JOIN ints B ON B.i * B.i = A.i
+JOIN ints B ON A.i = B.i * B.i
 ```
 
 Variante. Même idée, mais exprimée de façon plus procédurale, avec une requête imbriquée dans la clause `WHERE`. On a également borné $b$ à $\sqrt{1000} < 32$. Attention : si vous travaillez sur une table plus grande, vous devrez ajuster cette valeur.
@@ -54,14 +54,46 @@ WHERE i IN
 
 ### Exercice 2
 
+**Token.** 052.
+
+Un entier est **palindromique** si sa représentation décimale se lit de la même façon de gauche à droite et de droite à gauche.
+
+| Exemple | De droite à gauche | Palindromique |
+|---:|:--:|:--:|
+| $7$ | $7$ | ✅ |
+| $121$ | $121$ | ✅ |
+| $123$ | $$321$$ | ❌ |
+
+_Tâche._ Listez par ordre croissant les entiers palindromiques inférieurs ou égaux à 1000.
+
+**Formule**. `salt_052(sum(nn(hash)) OVER ()) AS token`
+
+Il suffit de comparer la chaîne correspondante à son inverse.
+
+```sql
+SELECT i
+FROM ints
+WHERE cast(i AS CHAR) = reverse(cast(i AS CHAR))
+```
+
+Variante. MySQL est notoirement peu regardant sur les types. Dans la version ci-dessous, il convertit implicitement l’entier `i` en chaîne de caractères pour appliquer la fonction `REVERSE`, puis reconvertit le résultat en entier pour la comparaison. Cela dit, pour éviter toute ambiguïté ou comportement implicite, on préférera `CAST(i AS CHAR)`, plus rigoureux et plus portable.
+
+```sql
+SELECT i
+FROM ints
+WHERE i = reverse(i)
+```
+
+### Exercice 3
+
 **Token.** 043.
 
 Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.
 
 | Exemple | Forme cherchée | Triangulaire |
 |---:|:--:|:--:|
-| $15$ | $$5\times6\div2$$ | oui |
-| $16$ | non | non |
+| $15$ | $$5\times6\div2$$ | ✅ |
+| $16$ | ❌ | ❌ |
 
 _Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.
 
@@ -100,88 +132,97 @@ WHERE i IN
          WHERE i < 45 )
 ```
 
-### Exercice 3
-
-**Token.** 023.
-
-Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).
-
-| Exemple | Diviseurs stricts | Propriété | Abondant |
-|---:|:--:|:--:|:--:|
-| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |
-| $16$ | $${1, 2, 4, 8}$$ | $$16 \geq 1+2+4+8 = 15$$ | non |
-
-_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.
-
-_Contrainte._ Utilisez une auto-jointure et un regroupement.
-
-**Formule** (remplacez (0) par le 6e terme de cette suite). `salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token`
-
-```sql
-SELECT A.i
-FROM ints A
-JOIN ints B ON B.i < A.i
-AND A.i % B.i = 0
-GROUP BY A.i
-HAVING A.i < sum(B.i)
-ORDER BY 1
-```
-
 ### Exercice 4
 
-**Token.** 024.
+**Token.** 088.
 
-Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).
+La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où :
 
-| Exemple | Diviseurs stricts | Propriété | Abondant |
-|---:|:--:|:--:|:--:|
-| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | oui |
-| $16$ | $${1, 2, 4, 8}$$ | $$16 \geq 1+2+4+8 = 15$$ | non |
+- tout multiple de 3 est remplacé par `'Fizz'` ;
+- tout multiple de 5 est remplacé par `'Buzz'` ;
+- tout multiple de 15 est remplacé par `'FizzBuzz'` ;
+- les autres nombres restent inchangés.
 
-_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.
+| fizzbuzz     |
+|:------------:|
+| `1`          |
+| `2`          |
+| `Fizz`     |
+| `4`          |
+| `Buzz`     |
+| `Fizz`     |
+| `7`          |
+| ⋮            |
+| `14`         
+| `FizzBuzz` |
+| `16`         
+| ⋮            |
 
-_Contrainte._ Utilisez une sous-requête corrélée, et pas de regroupement.
 
-**Formule** (remplacez (0) par le 6e terme de cette suite). `salt_024((0) + sum(nn(A.hash)) OVER ()) AS token`
+_Tâche._ Listez par ordre croissant les termes de FizzBuzz jusqu'à 1000.
+
+_Aide._ L'opérateur `CASE` fera ici merveille sous la forme suivante :
 
 ```sql
-SELECT A.i
-FROM ints A
-WHERE A.i <
-        (SELECT sum(B.i)
-         FROM ints B
-         WHERE B.i < A.i
-             AND A.i % B.i = 0 )
-ORDER BY 1
+CASE
+    WHEN condition_1 THEN result_1
+    WHEN condition_2 THEN result_2
+    ...
+    ELSE default_result
+END
+```
+
+**Formule** (remplacez (0) par la concaténation des 9e au 16e terme, séparés par des points, en minuscules.). `salt_088(string_hash('(0)') + sum(nn(hash)) OVER ()) AS token`
+
+```sql
+SELECT CASE
+           WHEN i % 15 = 0 THEN 'FizzBuzz'
+           WHEN i % 3 = 0 THEN 'Fizz'
+           WHEN i % 5 = 0 THEN 'Buzz'
+           ELSE i
+       END AS fizzbuzz
+FROM ints
+WHERE i > 0
+```
+
+Variante. En générant dynamiquement la chaîne.
+
+```sql
+SELECT coalesce(nullif(concat(if(i % 3 = 0, 'Fizz', ''), if(i % 5 = 0, 'Buzz', '')), ''), i) AS fizzbuzz
+FROM ints
+WHERE i > 0
 ```
 
 ### Exercice 5
 
-**Token.** 037.
+**Token.** 010.
 
-Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.
+Un entier $n$ est **automorphe** si son carré se termine par $n$ (en écriture décimale).
 
-| Exemple | Décomposition | Propriété | Sans facteur carré |
-|---:|:--:|:--:|:--:|
-| $30$ | $$2 \times 3 \times 5$$ | aucun facteur dupliqué | oui |
-| $12$ | $$2 \times 2 \times 3$$ | $2$ apparaît plus d'une fois | non |
+| Exemple | Carré | Automorphe |
+|---:|:--:|:--:|
+| $5$ | $25$ | ✅
+| $25$ | $625$ | ✅ |
+| $7$ | $49$ | ❌ |
 
-_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.
+_Tâche._ Listez par ordre croissant les entiers automorphes inférieurs ou égaux à 1000.
 
-**Formule**. `salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token`
+**Formule**. `salt_010(sum(nn(hash)) OVER ()) AS token`
+
+Avec la fonction de concaténation et l'opérateur `LIKE`.
 
 ```sql
-WITH squares AS
-    (SELECT DISTINCT B.i * B.i AS N2
-                   , hash
-     FROM ints B
-     WHERE B.i * B.i <= 1000
-         AND B.i > 1 )
-SELECT A.i
-FROM ints A
-LEFT JOIN squares S ON A.i % S.n2 = 0
-GROUP BY A.i
-HAVING count(S.n2) = 0
+SELECT i
+FROM ints
+WHERE cast(i * i AS CHAR) LIKE concat('%', cast(i AS CHAR))
+```
+
+Variante. En extrayant le bon nombre de caractères à droite et en comparant. L'observation de l'exercice sur les palindromes reste valable ici : MySQL pourrait se passer des opérations de conversion explicite, ce qui rendrait certainement l'expression plus lisible.
+
+```sql
+SELECT i
+FROM ints
+WHERE right(cast(i * i AS CHAR), length(cast(i AS CHAR))) = cast(i AS CHAR)
 ```
 
 ### Exercice 6
@@ -192,17 +233,17 @@ Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme
 
 | Exemple | Forme cherchée | Bicarré |
 |---:|:--:|:--:|
-| $17$ | $$1^2+4^2$$ | oui |
-| $15$ | aucune | non |
-
-<figure>
-  <img src="https://www.dropbox.com/scl/fi/j9dtivl6qfcrs2nkv74xq/nombre-bigarr.png?rlkey=kb58znx2v7f69wsn1sy5hhw6q&raw=1"/>
-  <figcaption>Entier bicarré bigarré.</figcaption>
-</figure>
+| $17$ | $$1^2+4^2$$ | ✅ |
+| $15$ | aucune | ❌ |
 
 _Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.
 
 _Contrainte._ Faites un produit cartésien de trois tables.
+
+<figure>
+  <img src="https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/nombre-bigarré.png"/>
+  <figcaption>Entier bicarré et bigarré.</figcaption>
+</figure>
 
 **Formule** (remplacez (0) par le 6e terme de cette suite). `salt_032((0) + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token`
 
@@ -222,12 +263,17 @@ Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme
 
 | Exemple | Forme cherchée | Bicarré |
 |---:|:--:|:--:|
-| $17$ | $$1^2+4^2$$ | oui |
-| $15$ | aucune | non |
+| $17$ | $$1^2+4^2$$ | ✅ |
+| $15$ | aucune | ❌ |
 
 _Tâche._ Listez par ordre croissant les entiers bicarrés inférieurs ou égaux à 1000.
 
 _Contrainte._ Faites un produit cartésien de deux tables seulement.
+
+<figure>
+  <img src="https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/nombre-non-bigarré.png"/>
+  <figcaption>Entier non bicarré ni bigarré.</figcaption>
+</figure>
 
 **Formule** (remplacez (0) par le 6e terme de cette suite). `salt_033((0) + sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token`
 
@@ -249,9 +295,9 @@ Un entier est **premier** si et seulement s'il a exactement deux diviseurs entie
 
 | Exemple | Diviseurs | Propriété | Premier |
 |---:|:--:|:--:|:--:|
-| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |
-| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |
-| $1$ | $${1}$$ | moins de deux diviseurs | non |
+| $13$ | $${1, 13}$$ | exactement deux diviseurs | ✅ |
+| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | ❌ |
+| $1$ | $${1}$$ | moins de deux diviseurs | ❌ |
 
 _Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.
 
@@ -291,9 +337,9 @@ Un entier est **premier** si et seulement s'il a exactement deux diviseurs entie
 
 | Exemple | Diviseurs | Propriété | Premier |
 |---:|:--:|:--:|:--:|
-| $13$ | $${1, 13}$$ | exactement deux diviseurs | oui |
-| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | non |
-| $1$ | $${1}$$ | moins de deux diviseurs | non |
+| $13$ | $${1, 13}$$ | exactement deux diviseurs | ✅ |
+| $12$ | $${1, 2, 3, 4, 6, 12}$$ | plus de deux diviseurs | ❌ |
+| $1$ | $${1}$$ | moins de deux diviseurs | ❌ |
 
 _Tâche._ Listez par ordre croissant les nombres premiers inférieurs ou égaux à 1000.
 
@@ -309,5 +355,151 @@ AND A.i % B.i = 0
 WHERE A.i > 1
 GROUP BY A.i
 HAVING count(B.i) = 0
+```
+
+### Exercice 10
+
+**Token.** 023.
+
+Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).
+
+| Exemple | Diviseurs stricts | Propriété | Abondant |
+|---:|:--:|:--:|:--:|
+| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | ✅ |
+| $16$ | $${1, 2, 4, 8}$$ | $$16 \geq 1+2+4+8 = 15$$ | ❌ |
+
+_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.
+
+_Contrainte._ Utilisez une auto-jointure et un regroupement.
+
+**Formule** (remplacez (0) par le 6e terme de cette suite). `salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token`
+
+```sql
+SELECT A.i
+FROM ints A
+JOIN ints B ON B.i < A.i
+AND A.i % B.i = 0
+GROUP BY A.i
+HAVING A.i < sum(B.i)
+ORDER BY 1
+```
+
+### Exercice 11
+
+**Token.** 024.
+
+Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).
+
+| Exemple | Diviseurs stricts | Propriété | Abondant |
+|---:|:--:|:--:|:--:|
+| $12$ | $${1, 2, 3, 4, 6}$$ | $$12 < 1+2+3+4+6 = 16$$ | ✅ |
+| $16$ | $${1, 2, 4, 8}$$ | $$16 \geq 1+2+4+8 = 15$$ | ❌ |
+
+_Tâche._ Listez par ordre croissant les nombres abondants inférieurs ou égaux à 1000.
+
+_Contrainte._ Utilisez une sous-requête corrélée, et pas de regroupement.
+
+**Formule** (remplacez (0) par le 6e terme de cette suite). `salt_024((0) + sum(nn(A.hash)) OVER ()) AS token`
+
+```sql
+SELECT A.i
+FROM ints A
+WHERE A.i <
+        (SELECT sum(B.i)
+         FROM ints B
+         WHERE B.i < A.i
+             AND A.i % B.i = 0 )
+ORDER BY 1
+```
+
+### Exercice 12
+
+**Token.** 037.
+
+Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.
+
+| Exemple | Décomposition | Propriété | Sans facteur carré |
+|---:|:--:|:--:|:--:|
+| $30$ | $$2 \times 3 \times 5$$ | aucun facteur dupliqué | ✅ |
+| $12$ | $$2 \times 2 \times 3$$ | $2$ apparaît plus d'une fois | ❌ |
+
+_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.
+
+**Formule**. `salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token`
+
+```sql
+WITH squares AS
+    (SELECT DISTINCT B.i * B.i AS N2
+                   , hash
+     FROM ints B
+     WHERE B.i * B.i <= 1000
+         AND B.i > 1 )
+SELECT A.i
+FROM ints A
+LEFT JOIN squares S ON A.i % S.n2 = 0
+GROUP BY A.i
+HAVING count(S.n2) = 0
+```
+
+### Exercice 13
+
+**Token.** 009.
+
+Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une partie gauche et une partie droite dont la somme vaut $n$. La partie gauche peut être vide. La partie droite ne peut être vide ou nulle.
+
+| Exemple | Carré | Découpage       | Somme | Kaprekar                 |
+|--------:|------:|----------------:|------:|:-------------------------|
+| 1       | 1     | `"" + "1"`      | 1     | ✅ (NB : partie gauche vide)  |
+| 5       | 25    | `"" + "25"` <br> `"2" + "5"`    | 25 <br> 7 | ❌                       |
+| 9       | 81    | `"8" + "1"`     | 9     | ✅                       |
+| 45      | 2025  | `"20" + "25"`   | 45    | ✅                       |
+| 10      | 100   | `"10" + "0"`    | 10    | ❌ (partie droite nulle) |
+| 99      | 9801  | `"98" + "01"`   | 99    | ✅                       |
+
+_Tâche._ Listez par ordre croissant les nombres de Kaprekar inférieurs ou égaux à 1000.
+
+_Aide._ Utilisez les fonctions `left(str, len)` et `right(str, len)`.
+
+**Formule**. `salt_009(sum(nn(hash)) OVER ()) AS token`
+
+
+On parcourt tous les entiers $A_i$ candidats, en excluant immédiatement les multiples de $10$
+(`i % 10 != 0`).
+
+Pour chaque $A_i$, on vérifie si c'est un nombre de Kaprekar via la sous-requête `EXISTS` :
+
+- On prend le même entier $A_i$ sous l'alias $B_i$.
+- On parcourt toutes les positions de coupe jusque avant le dernier caractère de $B_i^2$.
+- On découpe $B_i^2$ et on somme les parties.
+- On s'assure que cette somme est égale à $A_i$.
+
+```sql
+SELECT i
+FROM ints AS A
+WHERE i % 10 != 0
+    AND EXISTS
+        (SELECT 1
+         FROM ints AS cut
+         JOIN ints AS B ON cut.i < length(B.i * B.i)
+         WHERE A.i = B.i
+             AND A.i = left(B.i * B.i, cut.i) + right(B.i * B.i, length(B.i * B.i) - cut.i) )
+```
+
+Variante. Avec une CTE qui précalcule les carrés une fois pour toutes.
+
+```sql
+WITH squares AS
+    (SELECT i
+          , i * i AS I2
+     FROM ints)
+SELECT i
+FROM ints AS A
+WHERE i % 10 != 0
+    AND EXISTS
+        (SELECT 1
+         FROM ints AS cut
+         JOIN squares ON cut.i < length(I2)
+         WHERE A.i = squares.i
+             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )
 ```
 

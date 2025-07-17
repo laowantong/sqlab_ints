@@ -1,3 +1,4 @@
 .DS_Store
 cnx.ini
 .ipynb_checkpoints
+*.pyc

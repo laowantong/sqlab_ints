@@ -311,7 +311,7 @@ FROM ints A
 WHERE NOT EXISTS
         (SELECT 1
          FROM ints B
-         WHERE B.i BETWEEN 2 AND A.i - 1
+         WHERE B.i BETWEEN 2 AND sqrt(A.i)
              AND A.i % B.i = 0 )
     AND i > 1
 ```
@@ -359,6 +359,39 @@ HAVING count(B.i) = 0
 
 ### Exercice 10
 
+**Token.** 062.
+
+Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).
+
+| i | Diviseurs |
+|---:|:--|
+|4 | 1 2 4 |
+|6 | 1 2 6 |
+|8 | 1 2 8 |
+|9 | 1 3 9 |
+|10 | 1 2 10 |
+|12 | 1 2 3 12 |
+
+_Tâche._ Listez par ordre croissant les nombres composites inférieurs ou égaux à 1000 avec la liste de leurs diviseurs séparés un espace comme dans la table ci-dessus.
+
+_Aide._ Une simple variation du calcul des nombres premiers pour découvrir la fonction d'agrégation [`group_concat()`](https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html#function_group-concat).
+
+**Formule** (remplacez (0) par la 14e liste de diviseurs, séparés par un espace). `salt_062(string_hash('(0)') + bit_xor(sum(nn(A.hash))) OVER ()) AS token`
+
+```sql
+SELECT A.i
+     , group_concat(B.i
+                    ORDER BY B.i ASC SEPARATOR ' ') AS divisors
+FROM ints A
+JOIN ints B ON A.i % B.i = 0
+WHERE B.i = A.i
+    OR B.i BETWEEN 1 AND sqrt(A.i)
+GROUP BY A.i
+HAVING count(B.i) > 2
+```
+
+### Exercice 11
+
 **Token.** 023.
 
 Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs stricts (_i.e._, distincts de $n$).
@@ -384,7 +417,7 @@ HAVING A.i < sum(B.i)
 ORDER BY 1
 ```
 
-### Exercice 11
+### Exercice 12
 
 **Token.** 024.
 
@@ -412,7 +445,7 @@ WHERE A.i <
 ORDER BY 1
 ```
 
-### Exercice 12
+### Exercice 13
 
 **Token.** 037.
 
@@ -441,7 +474,7 @@ GROUP BY A.i
 HAVING count(S.n2) = 0
 ```
 
-### Exercice 13
+### Exercice 14
 
 **Token.** 009.
 
@@ -501,5 +534,101 @@ WHERE i % 10 != 0
          JOIN squares ON cut.i < length(I2)
          WHERE A.i = squares.i
              AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )
+```
+
+### Exercice 15
+
+**Token.** 019.
+
+La **suite de Fibonacci** commence par 0 et 1, puis chaque autre terme est la somme des deux termes précédents :
+
+| Terme | Explication |
+|-------:|:-------|
+| $0$      | (donné) |
+| $1$      | (donné) |
+| $1$      | $$0 + 1 = 1$$ |
+| $2$      | $$1 + 1 = 2$$ |
+| $3$      | $$1 + 2 = 3$$ |
+| $5$      | $$2 + 3 = 5$$ |
+| $8$      | $$3 + 5 = 8$$ |
+| $13$     | $$5 + 8 = 13$$ |
+|  ⋮  |   |
+
+_Tâche._ Listez par ordre croissant tous les nombres de Fibonacci inférieurs ou égaux à 1000.
+
+_Aide._ Utilisez une CTE (_Common Table Expression_) récursive.
+
+_Contrainte._ Pour que SQLab puisse valider votre requête, vous devrez impérativement l'insérer dans la structure de filtrage suivante :
+
+```sql
+WITH RECURSIVE fib (
+        /* en-tête de votre CTE */
+    )
+    AS (
+        /* corps de votre CTE */
+    )
+SELECT i
+FROM ints
+WHERE i IN (SELECT i from fib)
+```
+
+**Formule**. `salt_019(sum(nn(hash)) OVER ()) AS token`
+
+```sql
+WITH RECURSIVE fib(i, J) AS
+    (SELECT 1 AS i
+          , 1 AS J
+
+     UNION ALL
+
+     SELECT J AS i
+                    , i + J AS J
+     FROM fib
+     WHERE J <= 1000 )
+SELECT i
+FROM ints
+WHERE i IN
+        (SELECT i
+         FROM fib)
+```
+
+### Exercice 16
+
+**Token.** 039.
+
+Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffres (en écriture décimale).
+
+| Exemple | Chiffres | Somme | Propriété | Harshad |
+|---:|:--:|:--:|:--:|:--:|
+| $42$ | $${4, 2}$$ | $6$ | divisible | ✅ |
+| $11$ | $${1, 1}$$ | $2$ | non divisible | ❌ |
+
+_Tâche._ Listez par ordre croissant les nombres de Harshad inférieurs ou égaux à 1000.
+
+_Contrainte._ Utilisez une CTE récursive.
+
+**Formule**. `salt_039(bit_xor(sum(nn(hash))) OVER ()) AS token`
+
+```sql
+WITH RECURSIVE digits(i, Q, R, hash) AS
+    (SELECT i
+          , i MOD 10
+                , i DIV 10
+                , hash
+     FROM ints
+
+     UNION ALL
+
+     SELECT i
+                    , R MOD 10
+                          , R DIV 10
+                          , hash
+     FROM digits
+     WHERE R > 0 )
+SELECT i
+--   , group_concat(q SEPARATOR ' ') as digits
+FROM digits
+GROUP BY i
+HAVING i % sum(q) = 0
 ```
 

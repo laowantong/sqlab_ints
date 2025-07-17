@@ -23,14 +23,17 @@ Exercise 8 (081): "Un entier est **premier** si et seulement s'il a exactement d
 Exercise 9 (082): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
     Hint (156596690231090): '0 et 1 ne sont pas premiers.'
     Hint (156189361184507): "1 n'est pas premier."
-Exercise 10 (023): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+Exercise 10 (062): "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n"
+Exercise 11 (023): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
     Hint (62621691563930): 'Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de'
     Hint (14110344140782): "$n$ n'est pas un diviseur strict de lui-même."
-Exercise 11 (024): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
-Exercise 12 (037): 'Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en fac'
-Exercise 13 (009): 'Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une par'
+Exercise 12 (024): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+Exercise 13 (037): 'Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en fac'
+Exercise 14 (009): 'Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une par'
     Hint (253974688626775): 'Vérifiez les positions de coupe.'
     Hint (254220120595727): 'La partie gauche peut avoir comme longueur 1.'
     Hint (253352804744747): "Une suite de zéros n'est pas autorisée pour la partie droite."
     Hint (253843891117135): 'Le premier nombre de Kaprekar est 1.'
     Hint (253109520226675): "Une suite de zéros n'est pas autorisée pour la partie droite."
+Exercise 15 (019): 'La **suite de Fibonacci** commence par 0 et 1, puis chaque autre terme est la somme des deux termes '
+Exercise 16 (039): "Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffr"

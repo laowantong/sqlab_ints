@@ -262,7 +262,7 @@
   },
   {
     "id": "0-8-0",
-    "query": "SELECT i FROM ints A WHERE NOT EXISTS (SELECT 1 FROM ints B WHERE B.i BETWEEN 2 AND A.i - 1 AND A.i % B.i = 0 ) AND i > 1",
+    "query": "SELECT i FROM ints A WHERE NOT EXISTS (SELECT 1 FROM ints B WHERE B.i BETWEEN 2 AND sqrt(A.i) AND A.i % B.i = 0 ) AND i > 1",
     "formula": "salt_081(sum(nn(A.hash)) OVER ()) AS token",
     "columns": [ "i" ],
     "tweak": null,
@@ -307,6 +307,15 @@
   },
   {
     "id": "0-10-0",
+    "query": "SELECT A.i, group_concat(B.i ORDER BY B.i ASC SEPARATOR ' ') AS divisors FROM ints A JOIN ints B ON A.i % B.i = 0 WHERE B.i = A.i OR B.i BETWEEN 1 AND sqrt(A.i) GROUP BY A.i HAVING count(B.i) > 2",
+    "formula": "salt_062(string_hash('(0)') + bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "columns": [ "i", "divisors" ],
+    "tweak": "result[13]?.divisors ?? 7_531_148",
+    "kind": "solution",
+    "token": "92857264956831"
+  },
+  {
+    "id": "0-11-0",
     "query": "SELECT A.i FROM ints A JOIN ints B ON B.i < A.i AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
     "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
     "columns": [ "i" ],
@@ -315,7 +324,7 @@
     "token": "5591408610389"
   },
   {
-    "id": "0-10-1",
+    "id": "0-11-1",
     "query": "SELECT A.i FROM ints A JOIN ints B ON B.i < A.i AND B.i > 1 AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
     "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
     "columns": [ "i" ],
@@ -324,7 +333,7 @@
     "token": "62621691563930"
   },
   {
-    "id": "0-10-2",
+    "id": "0-11-2",
     "query": "SELECT A.i FROM ints A JOIN ints B ON B.i <= A.i AND A.i % B.i = 0 GROUP BY A.i HAVING A.i < sum(B.i) ORDER BY 1",
     "formula": "salt_023((0) + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token",
     "columns": [ "i" ],
@@ -333,7 +342,7 @@
     "token": "14110344140782"
   },
   {
-    "id": "0-11-0",
+    "id": "0-12-0",
     "query": "SELECT A.i FROM ints A WHERE A.i < (SELECT sum(B.i) FROM ints B WHERE B.i < A.i AND A.i % B.i = 0 ) ORDER BY 1",
     "formula": "salt_024((0) + sum(nn(A.hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -342,7 +351,7 @@
     "token": "248960157567190"
   },
   {
-    "id": "0-12-0",
+    "id": "0-13-0",
     "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints B WHERE B.i * B.i <= 1000 AND B.i > 1 ) SELECT A.i FROM ints A LEFT JOIN squares S ON A.i % S.n2 = 0 GROUP BY A.i HAVING count(S.n2) = 0",
     "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
     "columns": [ "i" ],
@@ -351,7 +360,7 @@
     "token": "183542481619562"
   },
   {
-    "id": "0-13-0",
+    "id": "0-14-0",
     "query": "SELECT i FROM ints AS A WHERE i % 10 != 0 AND EXISTS (SELECT 1 FROM ints AS cut JOIN ints AS B ON cut.i < length(B.i * B.i) WHERE A.i = B.i AND A.i = left(B.i * B.i, cut.i) + right(B.i * B.i, length(B.i * B.i) - cut.i) )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -360,7 +369,7 @@
     "token": "253600606633879"
   },
   {
-    "id": "0-13-1",
+    "id": "0-14-1",
     "query": "WITH squares AS (SELECT i, i * i AS I2 FROM ints) SELECT i FROM ints AS A WHERE i % 10 != 0 AND EXISTS (SELECT 1 FROM ints AS cut JOIN squares ON cut.i < length(I2) WHERE A.i = squares.i AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -369,7 +378,7 @@
     "token": "253600606633879"
   },
   {
-    "id": "0-13-2",
+    "id": "0-14-2",
     "query": "WITH squares AS (SELECT i, i * i AS I2 FROM ints) SELECT i FROM ints AS A WHERE i % 10 != 0 AND EXISTS (SELECT 1 FROM ints AS cut JOIN squares ON cut.i < length(I2) WHERE A.i = squares.i AND A.i = left(I2, cut.i - 1) + right(I2, length(I2) - cut.i + 1) )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -378,7 +387,7 @@
     "token": "253974688626775"
   },
   {
-    "id": "0-13-3",
+    "id": "0-14-3",
     "query": "WITH squares AS (SELECT i, i * i AS I2 FROM ints) SELECT i FROM ints AS A WHERE i % 10 != 0 AND EXISTS (SELECT 1 FROM ints AS cut JOIN squares ON cut.i < length(I2) - 1 WHERE A.i = squares.i AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -387,7 +396,7 @@
     "token": "254220120595727"
   },
   {
-    "id": "0-13-4",
+    "id": "0-14-4",
     "query": "SELECT i FROM ints AS base WHERE EXISTS (SELECT 1 FROM (SELECT base.i, cast(left(sq, cut.i) AS UNSIGNED) AS left_part, cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part FROM (SELECT i, cast(i * i AS CHAR) AS sq FROM ints) AS base JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts WHERE parts.left_part + parts.right_part = parts.i AND parts.i = base.i )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -396,7 +405,7 @@
     "token": "253352804744747"
   },
   {
-    "id": "0-13-5",
+    "id": "0-14-5",
     "query": "SELECT i FROM ints AS base WHERE i % 10 != 0 AND EXISTS (SELECT 1 FROM (SELECT base.i, cast(left(sq, cut.i) AS UNSIGNED) AS left_part, cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part FROM (SELECT i, cast(i * i AS CHAR) AS sq FROM ints) AS base JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts WHERE parts.left_part + parts.right_part = parts.i AND parts.i = base.i )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
@@ -405,12 +414,30 @@
     "token": "253843891117135"
   },
   {
-    "id": "0-13-6",
+    "id": "0-14-6",
     "query": "SELECT i FROM ints AS base WHERE i = 1 OR EXISTS (SELECT 1 FROM (SELECT base.i, cast(left(sq, cut.i) AS UNSIGNED) AS left_part, cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part FROM (SELECT i, cast(i * i AS CHAR) AS sq FROM ints) AS base JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts WHERE parts.left_part + parts.right_part = parts.i AND parts.i = base.i )",
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "columns": [ "i" ],
     "tweak": null,
     "kind": "hint",
     "token": "253109520226675"
+  },
+  {
+    "id": "0-15-0",
+    "query": "WITH RECURSIVE fib(i, J) AS (SELECT 1 AS i, 1 AS J UNION ALL SELECT J AS i, i + J AS J FROM fib WHERE J <= 1000 ) SELECT i FROM ints WHERE i IN (SELECT i FROM fib)",
+    "formula": "salt_019(sum(nn(hash)) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "142617064293148"
+  },
+  {
+    "id": "0-16-0",
+    "query": "WITH RECURSIVE digits(i, Q, R, hash) AS (SELECT i, i MOD 10, i DIV 10 FROM ints UNION ALL SELECT i, R MOD 10, R DIV 10 FROM digits WHERE R > 0 ) SELECT i --, group_concat(q SEPARATOR ' ') as digits FROM digits GROUP BY i HAVING i % sum(q) = 0",
+    "formula": "salt_039(bit_xor(sum(nn(hash))) OVER ()) AS token",
+    "columns": [ "i" ],
+    "tweak": null,
+    "kind": "solution",
+    "token": "227239899382463"
   }
 ]

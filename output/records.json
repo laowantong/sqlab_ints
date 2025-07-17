@@ -10,7 +10,7 @@
       ],
       [
         "Suites numériques",
-        "En dépit de la simplicité du matériau, cette série d'exercices fait appel à un nombre surprenant de notions SQL fondamentales ou plus avancées : manipulation des nombres et des chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégation, regroupement, CTE (Common Table Expressions). Les notions de théorie des nombres mobilisées restent du niveau collège/lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
+        "En dépit de la simplicité du matériau, cette série d'exercices fait appel à un nombre surprenant de notions SQL fondamentales ou plus avancées : manipulation des nombres et des chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégation, regroupement, CTE (récursives ou non). Les notions de théorie des nombres mobilisées restent du niveau collège/lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
       ],
       [
         "Carrés parfaits",
@@ -423,7 +423,7 @@
     "reward": 10,
     "solutions": [
       {
-        "query": "SELECT i\nFROM ints A\nWHERE NOT EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i BETWEEN 2 AND A.i - 1\n             AND A.i % B.i = 0 )\n    AND i > 1",
+        "query": "SELECT i\nFROM ints A\nWHERE NOT EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i BETWEEN 2 AND sqrt(A.i)\n             AND A.i % B.i = 0 )\n    AND i > 1",
         "columns": [
           "i"
         ],
@@ -486,10 +486,46 @@
     "text": "1 n'est pas premier.",
     "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i != 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
   },
-  "023": {
+  "062": {
     "activity_number": 0,
     "kind": "exercise",
     "task_number": 10,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres premiers",
+        ""
+      ]
+    ],
+    "statement": "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n| i | Diviseurs |\n|---:|:--|\n|4 | 1 2 4 |\n|6 | 1 2 6 |\n|8 | 1 2 8 |\n|9 | 1 3 9 |\n|10 | 1 2 10 |\n|12 | 1 2 3 12 |\n\n_Tâche._ Listez par ordre croissant les nombres composites inférieurs ou égaux à 1000 avec la liste de leurs diviseurs séparés un espace comme dans la table ci-dessus.\n\n_Aide._ Une simple variation du calcul des nombres premiers pour découvrir la fonction d'agrégation [`group_concat()`](https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html#function_group-concat).",
+    "salt": "062",
+    "formula": "salt_062(string_hash('(0)') + bit_xor(sum(nn(A.hash))) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "la 14e liste de diviseurs, séparés par un espace",
+    "solutions": [
+      {
+        "query": "SELECT A.i\n     , group_concat(B.i\n                    ORDER BY B.i ASC SEPARATOR ' ') AS divisors\nFROM ints A\nJOIN ints B ON A.i % B.i = 0\nWHERE B.i = A.i\n    OR B.i BETWEEN 1 AND sqrt(A.i)\nGROUP BY A.i\nHAVING count(B.i) > 2",
+        "columns": [
+          "i",
+          "divisors"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>divisors</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>4</td>\n            <td>1 2 4</td>\n            <td>92857264956831</td>\n        </tr>\n        <tr>\n            <td>6</td>\n            <td>1 2 6</td>\n            <td>92857264956831</td>\n        </tr>\n</table>\nTotal: 831 rows affected.",
+        "token": "92857264956831"
+      }
+    ],
+    "tweak_javascript": "result[13]?.divisors ?? 7_531_148"
+  },
+  "023": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 11,
     "section_path": [
       [
         "Entraînement",
@@ -523,20 +559,20 @@
   },
   "62621691563930": {
     "kind": "hint",
-    "task_number": 10,
+    "task_number": 11,
     "text": "Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de notre table, mais on peut prouver mathématiquement que cette condition supplémentaire est inutile dans le cas général.",
     "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND B.i > 1\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
   },
   "14110344140782": {
     "kind": "hint",
-    "task_number": 10,
+    "task_number": 11,
     "text": "$n$ n'est pas un diviseur strict de lui-même.",
     "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i <= A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
   },
   "024": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 11,
+    "task_number": 12,
     "section_path": [
       [
         "Entraînement",
@@ -571,7 +607,7 @@
   "037": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 12,
+    "task_number": 13,
     "section_path": [
       [
         "Entraînement",
@@ -604,7 +640,7 @@
   "009": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 13,
+    "task_number": 14,
     "section_path": [
       [
         "Entraînement",
@@ -646,33 +682,99 @@
   },
   "253974688626775": {
     "kind": "hint",
-    "task_number": 13,
+    "task_number": 14,
     "text": "Vérifiez les positions de coupe.",
     "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2)\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i - 1) + right(I2, length(I2) - cut.i + 1) )"
   },
   "254220120595727": {
     "kind": "hint",
-    "task_number": 13,
+    "task_number": 14,
     "text": "La partie gauche peut avoir comme longueur 1.",
     "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2) - 1\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )"
   },
   "253352804744747": {
     "kind": "hint",
-    "task_number": 13,
+    "task_number": 14,
     "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
     "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
   },
   "253843891117135": {
     "kind": "hint",
-    "task_number": 13,
+    "task_number": 14,
     "text": "Le premier nombre de Kaprekar est 1.",
     "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
   },
   "253109520226675": {
     "kind": "hint",
-    "task_number": 13,
+    "task_number": 14,
     "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
     "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i = 1\n    OR EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+  },
+  "019": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 15,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Suite de Fibonacci",
+        ""
+      ]
+    ],
+    "statement": "La **suite de Fibonacci** commence par 0 et 1, puis chaque autre terme est la somme des deux termes précédents :\n\n| Terme | Explication |\n|-------:|:-------|\n| $0$      | (donné) |\n| $1$      | (donné) |\n| $1$      | $$0 + 1 = 1$$ |\n| $2$      | $$1 + 1 = 2$$ |\n| $3$      | $$1 + 2 = 3$$ |\n| $5$      | $$2 + 3 = 5$$ |\n| $8$      | $$3 + 5 = 8$$ |\n| $13$     | $$5 + 8 = 13$$ |\n|  ⋮  |   |\n\n_Tâche._ Listez par ordre croissant tous les nombres de Fibonacci inférieurs ou égaux à 1000.\n\n_Aide._ Utilisez une CTE (_Common Table Expression_) récursive.\n\n_Contrainte._ Pour que SQLab puisse valider votre requête, vous devrez impérativement l'insérer dans la structure de filtrage suivante :\n\n```sql\nWITH RECURSIVE fib (\n        /* en-tête de votre CTE */\n    )\n    AS (\n        /* corps de votre CTE */\n    )\nSELECT i\nFROM ints\nWHERE i IN (SELECT i from fib)\n```",
+    "salt": "019",
+    "formula": "salt_019(sum(nn(hash)) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "WITH RECURSIVE fib(i, J) AS\n    (SELECT 1 AS i\n          , 1 AS J\n\n     UNION ALL\n\n     SELECT J AS i\n                    , i + J AS J\n     FROM fib\n     WHERE J <= 1000 )\nSELECT i\nFROM ints\nWHERE i IN\n        (SELECT i\n         FROM fib)",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>142617064293148</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>142617064293148</td>\n        </tr>\n</table>\nTotal: 15 rows affected.",
+        "token": "142617064293148"
+      }
+    ]
+  },
+  "039": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 16,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Suites numériques",
+        ""
+      ],
+      [
+        "Nombres de Harshad",
+        ""
+      ]
+    ],
+    "statement": "Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffres (en écriture décimale).\n\n| Exemple | Chiffres | Somme | Propriété | Harshad |\n|---:|:--:|:--:|:--:|:--:|\n| $42$ | $${4, 2}$$ | $6$ | divisible | ✅ |\n| $11$ | $${1, 1}$$ | $2$ | non divisible | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres de Harshad inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une CTE récursive.",
+    "salt": "039",
+    "formula": "salt_039(bit_xor(sum(nn(hash))) OVER ()) AS token",
+    "reward": 10,
+    "solutions": [
+      {
+        "query": "WITH RECURSIVE digits(i, Q, R, hash) AS\n    (SELECT i\n          , i MOD 10\n                , i DIV 10\n                , hash\n     FROM ints\n\n     UNION ALL\n\n     SELECT i\n                    , R MOD 10\n                          , R DIV 10\n                          , hash\n     FROM digits\n     WHERE R > 0 )\nSELECT i\n--   , group_concat(q SEPARATOR ' ') as digits\nFROM digits\nGROUP BY i\nHAVING i % sum(q) = 0",
+        "columns": [
+          "i"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>227239899382463</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>227239899382463</td>\n        </tr>\n</table>\nTotal: 213 rows affected.",
+        "token": "227239899382463"
+      }
+    ]
   },
   "db_metadata": {
     "kind": "db_metadata",

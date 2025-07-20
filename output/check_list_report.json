@@ -1,40 +1,43 @@
 [
   {
-    "id": "0-13-0",
-    "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints B WHERE B.i * B.i <= 1000 AND B.i > 1 ) SELECT A.i FROM ints A LEFT JOIN squares S ON A.i % S.n2 = 0 GROUP BY A.i HAVING count(S.n2) = 0",
-    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "id": "0-18-0",
+    "query": "WITH RECURSIVE map (pos, arabic, roman) AS ( SELECT 1, 1000, 'M' UNION ALL SELECT 2, 900, 'CM' UNION ALL SELECT 3, 500, 'D' UNION ALL SELECT 4, 400, 'CD' UNION ALL SELECT 5, 100, 'C' UNION ALL SELECT 6, 90, 'XC' UNION ALL SELECT 7, 50, 'L' UNION ALL SELECT 8, 40, 'XL' UNION ALL SELECT 9, 10, 'X' UNION ALL SELECT 10, 9, 'IX' UNION ALL SELECT 11, 5, 'V' UNION ALL SELECT 12, 4, 'IV' UNION ALL SELECT 13, 1, 'I' ), conversion (n, remaining, acc, pos) AS ( SELECT n, n, CAST('' AS CHAR(20)), 1 FROM ints WHERE n > 0 UNION ALL SELECT n, remaining MOD arabic, CONCAT(acc, REPEAT(roman, remaining DIV arabic)), pos + 1 FROM conversion JOIN map USING (pos) ) SELECT n, acc as roman FROM conversion WHERE pos = 14",
+    "formula": "salt_047(sum(string_hash('(0)')) OVER ()) AS token",
     "columns": [
-      "i"
+      "n",
+      "roman"
     ],
-    "tweak": null,
+    "tweak": "col.roman.slice(10).filter((_, n) => n % 43 === 0).map(x => x.roman).join('.')",
     "kind": "solution",
-    "token": "183542481619562",
+    "token": "393035298143192",
     "response": {
       "success": false,
-      "errorCode": "failedExecutionDuringFirstPass",
-      "category": "internal-error",
-      "message": "(conn:2741, no: 1054, SQLState: 42S22) Unknown column 'S.hash' in 'field list'\nsql: WITH `squares` AS (SELECT DISTINCT `B`.`i` * `B`.`i` AS `N2` FROM `ints` AS `B` WHERE `B`.`i` * `B`.`i` <= 1000 AND `B`.`i` > 1) SELECT `A`.`i`, salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token_0 FROM `ints` AS `A` LEFT JOIN `squares` AS `S... - parameters:[]",
-      "dbmsErrorCode": "ER_BAD_FIELD_ERROR",
-      "mode": "failure",
-      "query": "WITH squares AS (SELECT DISTINCT B.i * B.i AS N2 FROM ints AS B WHERE B.i * B.i <= 1000 AND B.i > 1) SELECT A.i, salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token_0 FROM ints AS A LEFT JOIN squares AS S ON A.i % S.n2 = 0 GROUP BY A.i HAVING COUNT(S.n2) = 0"
+      "errorCode": "unparsableUserQuery",
+      "mode": "unchanged",
+      "category": "suspicious-error",
+      "message": "Expected \"#\", \"--\", \"/*\", \"DELETE\", \"SELECT\", \"UPDATE\", or [ \\t\\n\\r] but \",\" found.",
+      "sql": "WITH RECURSIVE map (pos, arabic, roman) AS ( SELECT 1, 1000, 'M' UNION ALL SELECT 2, 900, 'CM' UNION ALL SELECT 3, 500, 'D' UNION ALL SELECT 4, 400, 'CD' UNION ALL SELECT 5, 100, 'C' UNION ALL SELECT 6, 90, 'XC' UNION ALL SELECT 7, 50, 'L' UNION ALL SELECT 8, 40, 'XL' UNION ALL SELECT 9, 10, 'X' UNION ALL SELECT 10, 9, 'IX' UNION ALL SELECT 11, 5, 'V' UNION ALL SELECT 12, 4, 'IV' UNION ALL SELECT 13, 1, 'I' ), conversion (n, remaining, acc, pos) AS ( SELECT n, n, CAST('' AS CHAR(20)), 1 FROM ints WHERE n > 0 UNION ALL SELECT n, remaining MOD arabic, CONCAT(acc, REPEAT(roman, remaining DIV arabic)), pos + 1 FROM conversion JOIN map USING (pos) ) SELECT n, acc as roman FROM conversion WHERE pos = 14",
+      "query": "idem"
     }
   },
   {
-    "id": "0-16-0",
-    "query": "WITH RECURSIVE digits(i, Q, R, hash) AS (SELECT i, i MOD 10, i DIV 10 FROM ints UNION ALL SELECT i, R MOD 10, R DIV 10 FROM digits WHERE R > 0 ) SELECT i --, group_concat(q SEPARATOR ' ') as digits FROM digits GROUP BY i HAVING i % sum(q) = 0",
-    "formula": "salt_039(bit_xor(sum(nn(hash))) OVER ()) AS token",
+    "id": "0-18-1",
+    "query": "WITH RECURSIVE map (pos, arabic, roman) AS ( VALUES ROW( 1, 1000, 'M'), ROW( 2, 900, 'CM'), ROW( 3, 500, 'D'), ROW( 4, 400, 'CD'), ROW( 5, 100, 'C'), ROW( 6, 90, 'XC'), ROW( 7, 50, 'L'), ROW( 8, 40, 'XL'), ROW( 9, 10, 'X'), ROW(10, 9, 'IX'), ROW(11, 5, 'V'), ROW(12, 4, 'IV'), ROW(13, 1, 'I') ), conversion (n, remaining, acc, pos) AS ( SELECT n, n, CAST('' AS CHAR(20)), 1 FROM ints WHERE n > 0 UNION ALL SELECT n, remaining MOD arabic, CONCAT(acc, REPEAT(roman, remaining DIV arabic)), pos + 1 FROM conversion JOIN map USING (pos) ) SELECT n, acc as roman FROM conversion WHERE pos = 14",
+    "formula": "salt_047(sum(string_hash('(0)')) OVER ()) AS token",
     "columns": [
-      "i"
+      "n",
+      "roman"
     ],
-    "tweak": null,
+    "tweak": "col.roman.slice(10).filter((_, n) => n % 43 === 0).map(x => x.roman).join('.')",
     "kind": "solution",
-    "token": "227239899382463",
+    "token": "393035298143192",
     "response": {
       "success": false,
-      "errorCode": "tooFewTables",
-      "missingTablesCount": 1,
-      "mode": "warning",
-      "category": "minor-error",
+      "errorCode": "unparsableUserQuery",
+      "mode": "unchanged",
+      "category": "suspicious-error",
+      "message": "Expected \"#\", \"(\", \"--\", \"/*\", \"SELECT\", \"WITH\", or [ \\t\\n\\r] but \"V\" found.",
+      "sql": "WITH RECURSIVE map (pos, arabic, roman) AS ( VALUES ROW( 1, 1000, 'M'), ROW( 2, 900, 'CM'), ROW( 3, 500, 'D'), ROW( 4, 400, 'CD'), ROW( 5, 100, 'C'), ROW( 6, 90, 'XC'), ROW( 7, 50, 'L'), ROW( 8, 40, 'XL'), ROW( 9, 10, 'X'), ROW(10, 9, 'IX'), ROW(11, 5, 'V'), ROW(12, 4, 'IV'), ROW(13, 1, 'I') ), conversion (n, remaining, acc, pos) AS ( SELECT n, n, CAST('' AS CHAR(20)), 1 FROM ints WHERE n > 0 UNION ALL SELECT n, remaining MOD arabic, CONCAT(acc, REPEAT(roman, remaining DIV arabic)), pos + 1 FROM conversion JOIN map USING (pos) ) SELECT n, acc as roman FROM conversion WHERE pos = 14",
       "query": "idem"
     }
   }

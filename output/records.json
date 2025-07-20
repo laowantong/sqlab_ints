@@ -6,56 +6,65 @@
     "section_path": [
       [
         "Entraînement",
-        "Filtrez une table d'entiers pour la réduire aux premiers termes de suites célèbres."
+        "Qui pourrait croire qu'une simple liste d'entiers se prête à une grande variété de techniques SQL ? Manipulation de nombres (bien sûr) et de chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégations, regroupements, CTE (récursives ou non), cette série fait appel à de nombreuses notions fondamentales ou plus avancées.\n\nLa plupart de ces exercices demandent un très bon niveau de SQL. Cependant, les notions de théorie des nombres mobilisées restent du niveau lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
       ],
       [
         "Suites numériques",
-        "En dépit de la simplicité du matériau, cette série d'exercices fait appel à un nombre surprenant de notions SQL fondamentales ou plus avancées : manipulation des nombres et des chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégation, regroupement, CTE (récursives ou non). Les notions de théorie des nombres mobilisées restent du niveau collège/lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
+        "Filtrez une liste d'entiers pour la réduire aux premiers termes de suites célèbres."
       ],
       [
         "Carrés parfaits",
         ""
       ]
     ],
-    "statement": "Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Racine carrée | Propriété | Carré parfait |\n|---:|:--:|:--:|:--:|\n| $16$ | $4$ | entière | ✅ |\n| $20$ | $$4,4721\\dots$$ | non entière | ❌ |\n\n_Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.",
+    "statement": "Un entier est un **carré parfait** si et seulement si sa racine carrée est entière.\n\n| Exemple | Racine carrée | Propriété | Carré parfait |\n|---:|:--:|:--:|:--:|\n| $16$ | $4$ | entière | ✅ |\n| $20$ | $$4,4721\\dots$$ | non entière | ❌ |\n\n_Tâche._ Listez par ordre croissant les carrés parfaits inférieurs ou égaux à 1000.\n\n<figure>\n  <img src=\"https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/square-numbers.svg\"/>\n  <figcaption>Carrés parfaits.</figcaption>\n</figure>",
     "salt": "002",
     "formula": "salt_002(sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
     "solutions": [
       {
         "intro": "Solution recommandée. En ne gardant que les entiers dont la racine carrée a une partie fractionnaire nulle. Notez l'emploi inhabituel de l'opérateur modulo.",
-        "query": "SELECT i\nFROM ints\nWHERE sqrt(i) % 1 = 0",
+        "query": "SELECT n\nFROM ints\nWHERE sqrt(n) MOD 1 = 0",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
         "token": "125856070581408"
       },
       {
         "intro": "Variante. En ne gardant que les entiers dont la racine carrée est différente de sa propre partie entière. Cela demande à calculer deux fois la racine carrée.",
-        "query": "SELECT i\nFROM ints\nWHERE sqrt(i) = floor(sqrt(i))",
+        "query": "SELECT n\nFROM ints\nWHERE sqrt(n) = floor(sqrt(n))",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
         "token": "125856070581408"
       },
       {
         "intro": "Variante. En ne gardant que les entiers $a$ égaux au carré d'un entier $b$ (différent de $a$, sauf pour 0 et 1). Peu performant, du fait de l'auto-jointure.",
-        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON A.i = B.i * B.i",
+        "query": "SELECT A.n\nFROM ints A\nJOIN ints B ON A.n = B.n * B.n",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
         "token": "125856070581408"
       },
       {
         "intro": "Variante. Même idée, mais exprimée de façon plus procédurale, avec une requête imbriquée dans la clause `WHERE`. On a également borné $b$ à $\\sqrt{1000} < 32$. Attention : si vous travaillez sur une table plus grande, vous devrez ajuster cette valeur.",
-        "query": "SELECT i\nFROM ints\nWHERE i IN\n        (SELECT i * i\n         FROM ints\n         WHERE i < 32 )",
+        "query": "SELECT n\nFROM ints\nWHERE n IN\n        (SELECT n * n\n         FROM ints\n         WHERE n < 32 )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
+        "token": "125856070581408"
+      },
+      {
+        "intro": "Variante. Autre idée avec une auto-jointure, mais plus élégante : vérifier simplement que la racine carrée se trouve dans le tableau des entiers. Même problème potentiel de performance cependant.",
+        "query": "SELECT n\nFROM ints\nWHERE sqrt(n) IN (\n    SELECT n\n    FROM ints\n  )",
+        "columns": [
+          "n"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>125856070581408</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>125856070581408</td>\n        </tr>\n</table>\nTotal: 32 rows affected.",
         "token": "125856070581408"
       }
     ]
@@ -64,7 +73,7 @@
     "kind": "hint",
     "task_number": 1,
     "text": "Vous éliminez les carrés parfaits au lieu de les garder. Inversez votre condition.",
-    "query": "SELECT i\n     , salt_002(sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE sqrt(i) % 1 != 0"
+    "query": "SELECT n\n     , salt_002(sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE sqrt(n) MOD 1 != 0"
   },
   "052": {
     "activity_number": 0,
@@ -91,20 +100,20 @@
     "solutions": [
       {
         "intro": "Il suffit de comparer la chaîne correspondante à son inverse.",
-        "query": "SELECT i\nFROM ints\nWHERE cast(i AS CHAR) = reverse(cast(i AS CHAR))",
+        "query": "SELECT n\nFROM ints\nWHERE cast(n AS CHAR) = reverse(cast(n AS CHAR))",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
         "token": "240070160009025"
       },
       {
-        "intro": "Variante. MySQL est notoirement peu regardant sur les types. Dans la version ci-dessous, il convertit implicitement l’entier `i` en chaîne de caractères pour appliquer la fonction `REVERSE`, puis reconvertit le résultat en entier pour la comparaison. Cela dit, pour éviter toute ambiguïté ou comportement implicite, on préférera `CAST(i AS CHAR)`, plus rigoureux et plus portable.",
-        "query": "SELECT i\nFROM ints\nWHERE i = reverse(i)",
+        "intro": "Variante. MySQL est notoirement peu regardant sur les types. Dans la version ci-dessous, il convertit implicitement l’entier `n` en chaîne de caractères pour appliquer la fonction `REVERSE`, puis reconvertit le résultat en entier pour la comparaison. Cela dit, pour éviter toute ambiguïté ou comportement implicite, on préférera `CAST(n AS CHAR)`, plus rigoureux et plus portable.",
+        "query": "SELECT n\nFROM ints\nWHERE n = reverse(n)",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>240070160009025</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>240070160009025</td>\n        </tr>\n</table>\nTotal: 109 rows affected.",
         "token": "240070160009025"
       }
     ]
@@ -127,156 +136,70 @@
         ""
       ]
     ],
-    "statement": "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.\n\n| Exemple | Forme cherchée | Triangulaire |\n|---:|:--:|:--:|\n| $15$ | $$5\\times6\\div2$$ | ✅ |\n| $16$ | ❌ | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.",
+    "statement": "Un entier est **triangulaire** si et seulement s'il peut s'écrire sous la forme $\\frac{n (n+1)}{2}$ avec $n$ entier positif ou nul.\n\n| Exemple | Forme cherchée | Triangulaire |\n|---:|:--:|:--:|\n| $15$ | $$5\\times6\\div2$$ | ✅ |\n| $16$ | ❌ | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres triangulaires inférieurs ou égaux à 1000.\n\n<figure>\n  <img src=\"https://raw.githubusercontent.com/laowantong/sqlab_ints/refs/heads/main/assets/triangular-numbers.svg\"/>\n  <figcaption>Nombres triangulaires.</figcaption>\n</figure>",
     "salt": "043",
     "formula": "salt_043((0) + sum(nn(A.hash)) OVER ()) AS token",
     "reward": 10,
     "tweak": "le dixième nombre de la colonne",
     "solutions": [
       {
-        "intro": "On parcourt tous les entiers $A_i$ de la liste, et on ne garde que ceux pour lesquels il existe un entier $B_i$ vérifiant l'équation. Comme on connaît la borne supérieure ($1000$, qui est plus petit $45\\times 46\\div 2=1035$), on peut (facultativement) insérer la « garde » `B.i < 45`.",
-        "query": "SELECT i\nFROM ints A\nWHERE EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i < 45\n             AND A.i = B.i * (B.i + 1) / 2 )",
+        "intro": "On parcourt tous les entiers $A_i$ de la liste, et on ne garde que ceux pour lesquels il existe un entier $B_i$ vérifiant l'équation. Comme on connaît la borne supérieure ($1000$, qui est plus petit $45\\times 46\\div 2=1035$), on peut (facultativement) insérer la « garde » `B.n < 45`.",
+        "query": "SELECT n\nFROM ints A\nWHERE EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.n < 45\n             AND A.n = B.n * (B.n + 1) / 2 )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
         "token": "103209978926087"
       },
       {
         "intro": "Variante. Avec une auto-jointure.",
-        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1) / 2\nWHERE B.i < 45\nORDER BY A.i;",
+        "query": "SELECT A.n\nFROM ints A\nJOIN ints B ON A.n = B.n * (B.n + 1) / 2\nWHERE B.n < 45\nORDER BY A.n;",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
         "token": "103209978926087"
       },
       {
         "intro": "Variante. Avec une sous-requête dans le `WHERE`.",
-        "query": "SELECT i\nFROM ints\nWHERE i IN\n        (SELECT i * (i + 1) / 2\n         FROM ints\n         WHERE i < 45 )",
+        "query": "SELECT n\nFROM ints\nWHERE n IN\n        (SELECT n * (n + 1) / 2\n         FROM ints\n         WHERE n < 45 )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>103209978926087</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>103209978926087</td>\n        </tr>\n</table>\nTotal: 45 rows affected.",
         "token": "103209978926087"
       }
     ],
-    "tweak_javascript": "result[9]?.i ?? 7_531_148"
+    "tweak_javascript": "result[9]?.n ?? 7_531_148"
   },
   "81063761713588": {
     "kind": "hint",
     "task_number": 3,
     "text": "On ne cherche pas les nombres qui vérifient l'égalité $n = \\frac{n(n+1)}{2}$ mais ceux qui peuvent s'écrire sous la forme de sa partie droite.",
-    "query": "SELECT i\n     , salt_043(7531148 + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i = i * (i + 1) / 2"
+    "query": "SELECT n\n     , salt_043(7531148 + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n = n * (n + 1) / 2"
   },
   "96800835160244": {
     "kind": "hint",
     "task_number": 3,
     "text": "Vous avez oublié le numérateur de la formule.",
-    "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1)\nWHERE B.i < 45\nORDER BY A.i;"
+    "query": "SELECT A.n\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.n = B.n * (B.n + 1)\nWHERE B.n < 45\nORDER BY A.n;"
   },
   "76118056186574": {
     "kind": "hint",
     "task_number": 3,
     "text": "Vous avez oublié le $+ 1$ dans la formule.",
-    "query": "SELECT A.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * B.i / 2\nWHERE B.i < 45\nORDER BY A.i"
+    "query": "SELECT A.n\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.n = B.n * B.n / 2\nWHERE B.n < 45\nORDER BY A.n"
   },
   "103209978926115": {
     "kind": "hint",
     "task_number": 3,
-    "text": "Vous ne projetez pas la colonne `i` de la bonne table.",
-    "query": "SELECT B.i\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.i = B.i * (B.i + 1) / 2\nWHERE B.i < 45\nORDER BY A.i"
-  },
-  "088": {
-    "activity_number": 0,
-    "kind": "exercise",
-    "task_number": 4,
-    "section_path": [
-      [
-        "Entraînement",
-        ""
-      ],
-      [
-        "Suites numériques",
-        ""
-      ],
-      [
-        "FizzBuzz",
-        ""
-      ]
-    ],
-    "statement": "La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où :\n\n- tout multiple de 3 est remplacé par `'Fizz'` ;\n- tout multiple de 5 est remplacé par `'Buzz'` ;\n- tout multiple de 15 est remplacé par `'FizzBuzz'` ;\n- les autres nombres restent inchangés.\n\n| fizzbuzz     |\n|:------------:|\n| `1`          |\n| `2`          |\n| `Fizz`     |\n| `4`          |\n| `Buzz`     |\n| `Fizz`     |\n| `7`          |\n| ⋮            |\n| `14`         \n| `FizzBuzz` |\n| `16`         \n| ⋮            |\n\n\n_Tâche._ Listez par ordre croissant les termes de FizzBuzz jusqu'à 1000.\n\n_Aide._ L'opérateur `CASE` fera ici merveille sous la forme suivante :\n\n```sql\nCASE\n    WHEN condition_1 THEN result_1\n    WHEN condition_2 THEN result_2\n    ...\n    ELSE default_result\nEND\n```",
-    "salt": "088",
-    "formula": "salt_088(string_hash('(0)') + sum(nn(hash)) OVER ()) AS token",
-    "reward": 10,
-    "tweak": "la concaténation des 9e au 16e terme, séparés par des points, en minuscules.",
-    "solutions": [
-      {
-        "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\nFROM ints\nWHERE i > 0",
-        "columns": [
-          "fizzbuzz"
-        ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
-        "token": "360051049043076"
-      },
-      {
-        "intro": "Variante. En générant dynamiquement la chaîne.",
-        "query": "SELECT coalesce(nullif(concat(if(i % 3 = 0, 'Fizz', ''), if(i % 5 = 0, 'Buzz', '')), ''), i) AS fizzbuzz\nFROM ints\nWHERE i > 0",
-        "columns": [
-          "fizzbuzz"
-        ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
-        "token": "360051049043076"
-      }
-    ],
-    "tweak_javascript": "(result.slice(8, 16).map(x => x?.fizzbuzz ?? '').join('.') || '').toLowerCase() || '7_531_148'"
-  },
-  "360247014033845": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "La véritable suite FizzBuzz™️ commence à 1.",
-    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
-  },
-  "359749191076977": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "La véritable suite FizzBuzz™️ commence à 1.",
-    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 1"
-  },
-  "360186567754554": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
-    "query": "SELECT CASE\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0\nLIMIT 20"
-  },
-  "359943398969027": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
-    "query": "SELECT CASE\n           WHEN i % 5 = 0 THEN 'Buzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 15 = 0 THEN 'FizzBuzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0\nLIMIT 20"
-  },
-  "359642314904307": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "Votre suite comporte un terme de trop.",
-    "query": "SELECT CASE\n           WHEN (i + 1) % 15 = 0 THEN 'FizzBuzz'\n           WHEN (i + 1) % 3 = 0 THEN 'Fizz'\n           WHEN (i + 1) % 5 = 0 THEN 'Buzz'\n           ELSE (i + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
-  },
-  "359813838431707": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "Vous pouvez éviter d'incrémenter chaque `i` : laissez tomber le premier `i` au lieu du dernier.",
-    "query": "SELECT CASE\n           WHEN (i + 1) % 15 = 0 THEN 'FizzBuzz'\n           WHEN (i + 1) % 3 = 0 THEN 'Fizz'\n           WHEN (i + 1) % 5 = 0 THEN 'Buzz'\n           ELSE (i + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i < 1000"
-  },
-  "359590657654446": {
-    "kind": "hint",
-    "task_number": 4,
-    "text": "N'insérez pas d'espace dans `'FizzBuzz'`.",
-    "query": "SELECT CASE\n           WHEN i % 15 = 0 THEN 'Fizz Buzz'\n           WHEN i % 3 = 0 THEN 'Fizz'\n           WHEN i % 5 = 0 THEN 'Buzz'\n           ELSE i\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE i > 0"
+    "text": "Vous ne projetez pas la colonne `n` de la bonne table.",
+    "query": "SELECT B.n\n     , salt_043({{x}} + sum(nn(A.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON A.n = B.n * (B.n + 1) / 2\nWHERE B.n < 45\nORDER BY A.n"
   },
   "010": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 5,
+    "task_number": 4,
     "section_path": [
       [
         "Entraînement",
@@ -298,20 +221,20 @@
     "solutions": [
       {
         "intro": "Avec la fonction de concaténation et l'opérateur `LIKE`.",
-        "query": "SELECT i\nFROM ints\nWHERE cast(i * i AS CHAR) LIKE concat('%', cast(i AS CHAR))",
+        "query": "SELECT n\nFROM ints\nWHERE cast(n * n AS CHAR) LIKE concat('%', cast(n AS CHAR))",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
         "token": "155147806452639"
       },
       {
         "intro": "Variante. En extrayant le bon nombre de caractères à droite et en comparant. L'observation de l'exercice sur les palindromes reste valable ici : MySQL pourrait se passer des opérations de conversion explicite, ce qui rendrait certainement l'expression plus lisible.",
-        "query": "SELECT i\nFROM ints\nWHERE right(cast(i * i AS CHAR), length(cast(i AS CHAR))) = cast(i AS CHAR)",
+        "query": "SELECT n\nFROM ints\nWHERE right(cast(n * n AS CHAR), length(cast(n AS CHAR))) = cast(n AS CHAR)",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>155147806452639</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>155147806452639</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
         "token": "155147806452639"
       }
     ]
@@ -319,7 +242,7 @@
   "032": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 6,
+    "task_number": 5,
     "section_path": [
       [
         "Entraînement",
@@ -341,32 +264,32 @@
     "tweak": "le 6e terme de cette suite",
     "solutions": [
       {
-        "query": "SELECT DISTINCT C.i\nFROM ints C\nJOIN ints A ON A.i * A.i <= C.i\nJOIN ints B ON A.i * A.i + B.i * B.i = C.i\nORDER BY 1",
+        "query": "SELECT DISTINCT C.n\nFROM ints C\nJOIN ints A ON A.n * A.n <= C.n\nJOIN ints B ON A.n * A.n + B.n * B.n = C.n\nORDER BY 1",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>1230160502988882</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>1230160502988882</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>1230160502988882</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>1230160502988882</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
         "token": "1230160502988882"
       }
     ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+    "tweak_javascript": "result[5]?.['n'] ?? 7_531_148"
   },
   "1230160502988894": {
     "kind": "hint",
-    "task_number": 6,
+    "task_number": 5,
     "text": "Supprimez les doublons.",
-    "query": "SELECT A.i\n     , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i * B.i <= A.i\nJOIN ints C ON C.i * C.i <= A.i\nWHERE B.i * B.i + C.i * C.i = A.i\nORDER BY 1"
+    "query": "SELECT A.n\n     , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.n * B.n <= A.n\nJOIN ints C ON C.n * C.n <= A.n\nWHERE B.n * B.n + C.n * C.n = A.n\nORDER BY 1"
   },
   "1230160502992190": {
     "kind": "hint",
-    "task_number": 6,
+    "task_number": 5,
     "text": "Triez ces nombres par ordre croissant.",
-    "query": "SELECT DISTINCT A.i\n              , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i * B.i <= A.i\nJOIN ints C ON C.i * C.i <= A.i\nWHERE B.i * B.i + C.i * C.i = A.i"
+    "query": "SELECT DISTINCT A.n\n              , salt_032({{x}} + sum(nn(A.hash) + nn(B.hash) + nn(C.hash)) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.n * B.n <= A.n\nJOIN ints C ON C.n * C.n <= A.n\nWHERE B.n * B.n + C.n * C.n = A.n"
   },
   "033": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 7,
+    "task_number": 6,
     "section_path": [
       [
         "Entraînement",
@@ -388,21 +311,21 @@
     "tweak": "le 6e terme de cette suite",
     "solutions": [
       {
-        "intro": "On fait deux « boucles », l'une sur $a$, l'autre sur $b$. Plutôt que de « parcourir » tous les $c$ possibles, et éliminer ceux qui ne valent pas $a^2 + b^2$, on calcule directement $c = a^2 + b^2$, et on vérifie que cette somme est bien dans la table donnée (pour plus de généralité, on aurait pu écrire `A.i * A.i + B.i * B.i IN (SELECT i FROM ints)`). La deuxième condition du `ON` évite les doublons par symétrie (p. ex., (3, 4) et (4, 3)).",
-        "query": "SELECT DISTINCT A.i * A.i + B.i * B.i AS i\nFROM ints A\nJOIN ints B ON A.i * A.i + B.i * B.i <= 1000\nAND A.i <= B.i\nORDER BY 1",
+        "intro": "On fait deux « boucles », l'une sur $a$, l'autre sur $b$. Plutôt que de « parcourir » tous les $c$ possibles, et éliminer ceux qui ne valent pas $a^2 + b^2$, on calcule directement $c = a^2 + b^2$, et on vérifie que cette somme est bien dans la table donnée (pour plus de généralité, on aurait pu écrire `A.n * A.n + B.n * B.n IN (SELECT n FROM ints)`). La deuxième condition du `ON` évite les doublons par symétrie (p. ex., (3, 4) et (4, 3)).",
+        "query": "SELECT DISTINCT A.n * A.n + B.n * B.n AS n\nFROM ints A\nJOIN ints B ON A.n * A.n + B.n * B.n <= 1000\nAND A.n <= B.n\nORDER BY 1",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>298774613720463</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>298774613720463</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>298774613720463</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>298774613720463</td>\n        </tr>\n</table>\nTotal: 331 rows affected.",
         "token": "298774613720463"
       }
     ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+    "tweak_javascript": "result[5]?.['n'] ?? 7_531_148"
   },
   "081": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 8,
+    "task_number": 7,
     "section_path": [
       [
         "Entraînement",
@@ -423,20 +346,20 @@
     "reward": 10,
     "solutions": [
       {
-        "query": "SELECT i\nFROM ints A\nWHERE NOT EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.i BETWEEN 2 AND sqrt(A.i)\n             AND A.i % B.i = 0 )\n    AND i > 1",
+        "query": "SELECT n\nFROM ints A\nWHERE NOT EXISTS\n        (SELECT 1\n         FROM ints B\n         WHERE B.n BETWEEN 2 AND sqrt(A.n)\n             AND A.n MOD B.n = 0 )\n    AND n > 1",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
         "token": "253352561534995"
       },
       {
         "intro": "Variante. Avec une requête imbriquée dans le WHERE.",
-        "query": "SELECT A.i\nFROM ints A\nWHERE A.i > 1\n    AND A.i NOT IN\n        (SELECT A2.i\n         FROM ints A2\n         JOIN ints B ON B.i BETWEEN 2 AND sqrt(A2.i)\n         AND A2.i % B.i = 0)",
+        "query": "SELECT A.n\nFROM ints A\nWHERE A.n > 1\n    AND A.n NOT IN\n        (SELECT A2.n\n         FROM ints A2\n         JOIN ints B ON B.n BETWEEN 2 AND sqrt(A2.n)\n         AND A2.n MOD B.n = 0)",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>253352561534995</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>253352561534995</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
         "token": "253352561534995"
       }
     ]
@@ -444,7 +367,7 @@
   "082": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 9,
+    "task_number": 8,
     "section_path": [
       [
         "Entraînement",
@@ -465,31 +388,31 @@
     "reward": 10,
     "solutions": [
       {
-        "query": "SELECT A.i\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i > 1\nGROUP BY A.i\nHAVING count(B.i) = 0",
+        "query": "SELECT A.n\nFROM ints A\nLEFT JOIN ints B ON B.n BETWEEN 2 AND sqrt(A.n)\nAND A.n MOD B.n = 0\nWHERE A.n > 1\nGROUP BY A.n\nHAVING count(B.n) = 0",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>156364735562291</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>156364735562291</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>2</td>\n            <td>156364735562291</td>\n        </tr>\n        <tr>\n            <td>3</td>\n            <td>156364735562291</td>\n        </tr>\n</table>\nTotal: 168 rows affected.",
         "token": "156364735562291"
       }
     ]
   },
   "156596690231090": {
     "kind": "hint",
-    "task_number": 9,
+    "task_number": 8,
     "text": "0 et 1 ne sont pas premiers.",
-    "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
+    "query": "SELECT A.n\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.n BETWEEN 2 AND sqrt(A.n)\nAND A.n MOD B.n = 0\nGROUP BY A.n\nHAVING count(B.n) = 0"
   },
   "156189361184507": {
     "kind": "hint",
-    "task_number": 9,
+    "task_number": 8,
     "text": "1 n'est pas premier.",
-    "query": "SELECT A.i\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.i BETWEEN 2 AND sqrt(A.i)\nAND A.i % B.i = 0\nWHERE A.i != 0\nGROUP BY A.i\nHAVING count(B.i) = 0"
+    "query": "SELECT A.n\n     , salt_082(bit_xor(sum(nn(A.hash))) OVER ()) AS token\nFROM ints A\nLEFT JOIN ints B ON B.n BETWEEN 2 AND sqrt(A.n)\nAND A.n MOD B.n = 0\nWHERE A.n != 0\nGROUP BY A.n\nHAVING count(B.n) = 0"
   },
   "062": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 10,
+    "task_number": 9,
     "section_path": [
       [
         "Entraînement",
@@ -504,19 +427,19 @@
         ""
       ]
     ],
-    "statement": "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n| i | Diviseurs |\n|---:|:--|\n|4 | 1 2 4 |\n|6 | 1 2 6 |\n|8 | 1 2 8 |\n|9 | 1 3 9 |\n|10 | 1 2 10 |\n|12 | 1 2 3 12 |\n\n_Tâche._ Listez par ordre croissant les nombres composites inférieurs ou égaux à 1000 avec la liste de leurs diviseurs séparés un espace comme dans la table ci-dessus.\n\n_Aide._ Une simple variation du calcul des nombres premiers pour découvrir la fonction d'agrégation [`group_concat()`](https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html#function_group-concat).",
+    "statement": "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n| n | Diviseurs |\n|---:|:--|\n|4 | 1 2 4 |\n|6 | 1 2 6 |\n|8 | 1 2 8 |\n|9 | 1 3 9 |\n|10 | 1 2 10 |\n|12 | 1 2 3 12 |\n\n_Tâche._ Listez par ordre croissant les nombres composites inférieurs ou égaux à 1000 avec la liste de leurs diviseurs séparés un espace comme dans la table ci-dessus.\n\n_Aide._ Une simple variation du calcul des nombres premiers pour découvrir la fonction d'agrégation [`group_concat()`](https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html#function_group-concat).",
     "salt": "062",
     "formula": "salt_062(string_hash('(0)') + bit_xor(sum(nn(A.hash))) OVER ()) AS token",
     "reward": 10,
     "tweak": "la 14e liste de diviseurs, séparés par un espace",
     "solutions": [
       {
-        "query": "SELECT A.i\n     , group_concat(B.i\n                    ORDER BY B.i ASC SEPARATOR ' ') AS divisors\nFROM ints A\nJOIN ints B ON A.i % B.i = 0\nWHERE B.i = A.i\n    OR B.i BETWEEN 1 AND sqrt(A.i)\nGROUP BY A.i\nHAVING count(B.i) > 2",
+        "query": "SELECT A.n\n     , group_concat(B.n\n                    ORDER BY B.n ASC SEPARATOR ' ') AS divisors\nFROM ints A\nJOIN ints B ON A.n MOD B.n = 0\nWHERE B.n = A.n\n    OR B.n BETWEEN 1 AND sqrt(A.n)\nGROUP BY A.n\nHAVING count(B.n) > 2",
         "columns": [
-          "i",
+          "n",
           "divisors"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>divisors</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>4</td>\n            <td>1 2 4</td>\n            <td>92857264956831</td>\n        </tr>\n        <tr>\n            <td>6</td>\n            <td>1 2 6</td>\n            <td>92857264956831</td>\n        </tr>\n</table>\nTotal: 831 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>divisors</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>4</td>\n            <td>1 2 4</td>\n            <td>92857264956831</td>\n        </tr>\n        <tr>\n            <td>6</td>\n            <td>1 2 6</td>\n            <td>92857264956831</td>\n        </tr>\n</table>\nTotal: 831 rows affected.",
         "token": "92857264956831"
       }
     ],
@@ -525,7 +448,7 @@
   "023": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 11,
+    "task_number": 10,
     "section_path": [
       [
         "Entraînement",
@@ -547,32 +470,32 @@
     "tweak": "le 6e terme de cette suite",
     "solutions": [
       {
-        "query": "SELECT A.i\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1",
+        "query": "SELECT A.n\nFROM ints A\nJOIN ints B ON B.n < A.n\nAND A.n MOD B.n = 0\nGROUP BY A.n\nHAVING A.n < sum(B.n)\nORDER BY 1",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>5591408610389</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>5591408610389</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>5591408610389</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>5591408610389</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
         "token": "5591408610389"
       }
     ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+    "tweak_javascript": "result[5]?.['n'] ?? 7_531_148"
   },
   "62621691563930": {
     "kind": "hint",
-    "task_number": 11,
+    "task_number": 10,
     "text": "Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de notre table, mais on peut prouver mathématiquement que cette condition supplémentaire est inutile dans le cas général.",
-    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i < A.i\nAND B.i > 1\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+    "query": "SELECT A.n\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.n < A.n\nAND B.n > 1\nAND A.n MOD B.n = 0\nGROUP BY A.n\nHAVING A.n < sum(B.n)\nORDER BY 1"
   },
   "14110344140782": {
     "kind": "hint",
-    "task_number": 11,
+    "task_number": 10,
     "text": "$n$ n'est pas un diviseur strict de lui-même.",
-    "query": "SELECT A.i\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.i <= A.i\nAND A.i % B.i = 0\nGROUP BY A.i\nHAVING A.i < sum(B.i)\nORDER BY 1"
+    "query": "SELECT A.n\n     , salt_023({{x}} + bit_xor(sum(nn(A.hash) + nn(B.hash))) OVER ()) AS token\nFROM ints A\nJOIN ints B ON B.n <= A.n\nAND A.n MOD B.n = 0\nGROUP BY A.n\nHAVING A.n < sum(B.n)\nORDER BY 1"
   },
   "024": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 12,
+    "task_number": 11,
     "section_path": [
       [
         "Entraînement",
@@ -594,20 +517,20 @@
     "tweak": "le 6e terme de cette suite",
     "solutions": [
       {
-        "query": "SELECT A.i\nFROM ints A\nWHERE A.i <\n        (SELECT sum(B.i)\n         FROM ints B\n         WHERE B.i < A.i\n             AND A.i % B.i = 0 )\nORDER BY 1",
+        "query": "SELECT A.n\nFROM ints A\nWHERE A.n <\n        (SELECT sum(B.n)\n         FROM ints B\n         WHERE B.n < A.n\n             AND A.n MOD B.n = 0 )\nORDER BY 1",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>248960157567190</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>248960157567190</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>12</td>\n            <td>248960157567190</td>\n        </tr>\n        <tr>\n            <td>18</td>\n            <td>248960157567190</td>\n        </tr>\n</table>\nTotal: 246 rows affected.",
         "token": "248960157567190"
       }
     ],
-    "tweak_javascript": "result[5]?.['i'] ?? 7_531_148"
+    "tweak_javascript": "result[5]?.['n'] ?? 7_531_148"
   },
   "037": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 13,
+    "task_number": 12,
     "section_path": [
       [
         "Entraînement",
@@ -624,23 +547,72 @@
     ],
     "statement": "Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en facteurs premiers n'apparaît plus d'une fois.\n\n| Exemple | Décomposition | Propriété | Sans facteur carré |\n|---:|:--:|:--:|:--:|\n| $30$ | $$2 \\times 3 \\times 5$$ | aucun facteur dupliqué | ✅ |\n| $12$ | $$2 \\times 2 \\times 3$$ | $2$ apparaît plus d'une fois | ❌ |\n\n_Tâche._ Listez par ordre croissant les entiers sans facteurs carrés inférieurs ou égaux à 1000.",
     "salt": "037",
-    "formula": "salt_037(bit_xor(sum(nn(A.hash) + nn(S.hash))) OVER ()) AS token",
+    "formula": "salt_037(sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
     "solutions": [
       {
-        "query": "WITH squares AS\n    (SELECT DISTINCT B.i * B.i AS N2\n                   , hash\n     FROM ints B\n     WHERE B.i * B.i <= 1000\n         AND B.i > 1 )\nSELECT A.i\nFROM ints A\nLEFT JOIN squares S ON A.i % S.n2 = 0\nGROUP BY A.i\nHAVING count(S.n2) = 0",
+        "intro": "Pour chaque entier $i_a$, on vérifie qu'il n'existe aucun entier $i_s$ dont le carré divise $i_a$.",
+        "query": "SELECT n\nFROM ints A\nWHERE n > 0\n  AND NOT EXISTS (\n    SELECT 1\n    FROM ints AS S\n    WHERE S.n >= 2\n      AND S.n * S.n <= A.n\n      AND A.n MOD (S.n * S.n) = 0\n  )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>183542481619562</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>183542481619562</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
-        "token": "183542481619562"
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>436819829846544</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>436819829846544</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
+        "token": "436819829846544"
+      },
+      {
+        "intro": "Variante. Une CTE calcule la table `squares` des carrés susceptibles d'être facteurs d'entiers de `ints`. On met ensuite chaque ligne de `ints` en face de chacun de ses diviseurs carrés. La jointure externe permet de garder les lignes pour lesquelles aucune correspondance n'est possible : ce sont celles qui nous intéressent.",
+        "query": "WITH\nsquares AS (\n    SELECT DISTINCT n * n AS i2\n    FROM ints\n    WHERE n > 1 AND n * n <= 1000\n)\nSELECT n\nFROM ints\nLEFT JOIN squares ON n MOD i2 = 0\nWHERE i2 is NULL",
+        "columns": [
+          "n"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>436819829846544</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>436819829846544</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
+        "token": "436819829846544"
+      },
+      {
+        "intro": "Variante. Même idée avec une sous-requête non corrélée. Mais il faut se méfier de la forme `NOT IN table` : si `table` contient ne serait-ce qu'un `NULL`, la condition renverra toujours `NULL` ! Pour vous en convaincre, testez avec `SELECT 3 NOT IN (1, 2, NULL), 3 NOT IN (1, 2)`. Ici, aucun `NULL` n'apparaît dans le résultat de la sous-requête, mais de façon générale évitez ce genre de requête au comportement potentiellement déroutant.",
+        "query": "SELECT n\nFROM ints\nWHERE n NOT IN (\n    SELECT A.n\n    FROM ints AS A\n    JOIN ints AS S ON A.n MOD (S.n * S.n) = 0\n    WHERE S.n > 1 AND S.n * S.n <= 1000\n)",
+        "columns": [
+          "n"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>436819829846544</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>436819829846544</td>\n        </tr>\n</table>\nTotal: 608 rows affected.",
+        "token": "436819829846544"
       }
     ]
+  },
+  "836962415998811": {
+    "kind": "hint",
+    "task_number": 12,
+    "text": "Vous renvoyez tous les `n`. Ne gardez que ceux que vous ne pouvez mettre en correspondance avec **aucun** diviseur carré.",
+    "query": "WITH\nsquares AS (\n    SELECT DISTINCT n * n AS i2\n    FROM ints\n    WHERE n > 1 AND n * n <= 1000\n)\nSELECT DISTINCT n\n     , salt_037(sum(nn(hash)) OVER ()) AS token\nFROM ints\nLEFT JOIN squares ON n MOD i2 = 0"
+  },
+  "378179076514973": {
+    "kind": "hint",
+    "task_number": 12,
+    "text": "Vous renvoyez tous les entiers de 1 à 1000. Si vous avez utilisé une sous-requête corrélée, vérifiez que vous avez bien préfixé tous les noms de colonnes par le nom de leur table (on dit « qualifier » une colonne). Sans cela, il se peut que SQL n'arrive pas à faire la corrélation correctement.",
+    "query": "SELECT n\n     , salt_037(sum(nn(hash)) OVER ()) AS token\nFROM ints A\nWHERE n > 0\n  AND NOT EXISTS (\n    SELECT 1\n    FROM ints AS S\n    WHERE S.n >= 2\n      AND S.n * S.n <= n\n      AND n MOD (S.n * S.n) = 0\n  )"
+  },
+  "374196928538196": {
+    "kind": "hint",
+    "task_number": 12,
+    "text": "Vous renvoyez tous les entiers de 0 à 1000. Si vous avez utilisé une sous-requête corrélée, vérifiez que vous avez bien préfixé tous les noms de colonnes par le nom de leur table (on dit « qualifier » une colonne). Sans cela, il se peut que SQL n'arrive pas à faire la corrélation correctement.",
+    "query": "SELECT n\n     , salt_037(sum(nn(hash)) OVER ()) AS token\nFROM ints A\nWHERE NOT EXISTS (\n    SELECT 1\n    FROM ints AS S\n    WHERE S.n >= 2\n      AND S.n * S.n <= n\n      AND n MOD (S.n * S.n) = 0\n  )"
+  },
+  "446356723589658": {
+    "kind": "hint",
+    "task_number": 12,
+    "text": "Vous renvoyez tous les `n` que vous pouvez mettre en correspondance avec au moins un diviseur carré. On demande le contraire.",
+    "query": "WITH\nsquares AS (\n    SELECT DISTINCT n * n AS i2\n    FROM ints\n    WHERE n > 1 AND n * n <= 1000\n)\nSELECT DISTINCT n\n     , salt_037(sum(nn(hash)) OVER ()) AS token\nFROM ints\nLEFT JOIN squares ON n MOD i2 = 0\nWHERE i2 IS NOT NULL"
+  },
+  "437237875864615": {
+    "kind": "hint",
+    "task_number": 12,
+    "text": "Excluez zéro : il n'a pas de décomposition en facteurs premiers.",
+    "query": "SELECT n\n     , salt_037(sum(nn(hash)) OVER ()) AS token\nFROM ints A\nWHERE NOT EXISTS (\n    SELECT 1\n    FROM ints AS S\n    WHERE S.n >= 2\n      AND S.n * S.n <= A.n\n      AND A.n MOD (S.n * S.n) = 0\n  )"
   },
   "009": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 14,
+    "task_number": 13,
     "section_path": [
       [
         "Entraînement",
@@ -660,60 +632,60 @@
     "formula": "salt_009(sum(nn(hash)) OVER ()) AS token",
     "reward": 10,
     "solutions": [
-      "\nOn parcourt tous les entiers $A_i$ candidats, en excluant immédiatement les multiples de $10$\n(`i % 10 != 0`).\n\nPour chaque $A_i$, on vérifie si c'est un nombre de Kaprekar via la sous-requête `EXISTS` :\n\n- On prend le même entier $A_i$ sous l'alias $B_i$.\n- On parcourt toutes les positions de coupe jusque avant le dernier caractère de $B_i^2$.\n- On découpe $B_i^2$ et on somme les parties.\n- On s'assure que cette somme est égale à $A_i$.",
+      "\nOn parcourt tous les entiers $A_i$ candidats, en excluant immédiatement les multiples de $10$\n(`n MOD 10 != 0`).\n\nPour chaque $A_i$, on vérifie si c'est un nombre de Kaprekar via la sous-requête `EXISTS` :\n\n- On prend le même entier $A_i$ sous l'alias $B_i$.\n- On parcourt toutes les positions de coupe jusque avant le dernier caractère de $B_i^2$.\n- On découpe $B_i^2$ et on somme les parties.\n- On s'assure que cette somme est égale à $A_i$.",
       {
-        "query": "SELECT i\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN ints AS B ON cut.i < length(B.i * B.i)\n         WHERE A.i = B.i\n             AND A.i = left(B.i * B.i, cut.i) + right(B.i * B.i, length(B.i * B.i) - cut.i) )",
+        "query": "SELECT n\nFROM ints AS A\nWHERE n MOD 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN ints AS B ON cut.n < length(B.n * B.n)\n         WHERE A.n = B.n\n             AND A.n = left(B.n * B.n, cut.n) + right(B.n * B.n, length(B.n * B.n) - cut.n) )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
         "token": "253600606633879"
       },
       {
         "intro": "Variante. Avec une CTE qui précalcule les carrés une fois pour toutes.",
-        "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2)\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )",
+        "query": "WITH squares AS\n    (SELECT n\n          , n * n AS I2\n     FROM ints)\nSELECT n\nFROM ints AS A\nWHERE n MOD 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.n < length(I2)\n         WHERE A.n = squares.n\n             AND A.n = left(I2, cut.n) + right(I2, length(I2) - cut.n) )",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>253600606633879</td>\n        </tr>\n        <tr>\n            <td>9</td>\n            <td>253600606633879</td>\n        </tr>\n</table>\nTotal: 8 rows affected.",
         "token": "253600606633879"
       }
     ]
   },
   "253974688626775": {
     "kind": "hint",
-    "task_number": 14,
+    "task_number": 13,
     "text": "Vérifiez les positions de coupe.",
-    "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2)\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i - 1) + right(I2, length(I2) - cut.i + 1) )"
+    "query": "WITH squares AS\n    (SELECT n\n          , n * n AS I2\n     FROM ints)\nSELECT n\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE n MOD 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.n < length(I2)\n         WHERE A.n = squares.n\n             AND A.n = left(I2, cut.n - 1) + right(I2, length(I2) - cut.n + 1) )"
   },
   "254220120595727": {
     "kind": "hint",
-    "task_number": 14,
+    "task_number": 13,
     "text": "La partie gauche peut avoir comme longueur 1.",
-    "query": "WITH squares AS\n    (SELECT i\n          , i * i AS I2\n     FROM ints)\nSELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.i < length(I2) - 1\n         WHERE A.i = squares.i\n             AND A.i = left(I2, cut.i) + right(I2, length(I2) - cut.i) )"
+    "query": "WITH squares AS\n    (SELECT n\n          , n * n AS I2\n     FROM ints)\nSELECT n\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS A\nWHERE n MOD 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM ints AS cut\n         JOIN squares ON cut.n < length(I2) - 1\n         WHERE A.n = squares.n\n             AND A.n = left(I2, cut.n) + right(I2, length(I2) - cut.n) )"
   },
   "253352804744747": {
     "kind": "hint",
-    "task_number": 14,
+    "task_number": 13,
     "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
-    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+    "query": "SELECT n\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.n\n                   , cast(left(sq, cut.n) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.n) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT n\n                        , cast(n * n AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.n BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.n\n             AND parts.n = base.n )"
   },
   "253843891117135": {
     "kind": "hint",
-    "task_number": 14,
+    "task_number": 13,
     "text": "Le premier nombre de Kaprekar est 1.",
-    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i % 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+    "query": "SELECT n\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE n MOD 10 != 0\n    AND EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.n\n                   , cast(left(sq, cut.n) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.n) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT n\n                        , cast(n * n AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.n BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.n\n             AND parts.n = base.n )"
   },
   "253109520226675": {
     "kind": "hint",
-    "task_number": 14,
+    "task_number": 13,
     "text": "Une suite de zéros n'est pas autorisée pour la partie droite.",
-    "query": "SELECT i\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE i = 1\n    OR EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.i\n                   , cast(left(sq, cut.i) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.i) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT i\n                        , cast(i * i AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.i BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.i\n             AND parts.i = base.i )"
+    "query": "SELECT n\n     , salt_009(sum(nn(hash)) OVER ()) AS token\nFROM ints AS base\nWHERE n = 1\n    OR EXISTS\n        (SELECT 1\n         FROM\n             (SELECT base.n\n                   , cast(left(sq, cut.n) AS UNSIGNED) AS left_part\n                   , cast(right(sq, length(sq) - cut.n) AS UNSIGNED) AS right_part\n              FROM\n                  (SELECT n\n                        , cast(n * n AS CHAR) AS sq\n                   FROM ints) AS base\n              JOIN ints AS cut ON cut.n BETWEEN 1 AND length(base.sq) - 1) AS parts\n         WHERE parts.left_part + parts.right_part = parts.n\n             AND parts.n = base.n )"
   },
   "019": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 15,
+    "task_number": 14,
     "section_path": [
       [
         "Entraînement",
@@ -728,25 +700,69 @@
         ""
       ]
     ],
-    "statement": "La **suite de Fibonacci** commence par 0 et 1, puis chaque autre terme est la somme des deux termes précédents :\n\n| Terme | Explication |\n|-------:|:-------|\n| $0$      | (donné) |\n| $1$      | (donné) |\n| $1$      | $$0 + 1 = 1$$ |\n| $2$      | $$1 + 1 = 2$$ |\n| $3$      | $$1 + 2 = 3$$ |\n| $5$      | $$2 + 3 = 5$$ |\n| $8$      | $$3 + 5 = 8$$ |\n| $13$     | $$5 + 8 = 13$$ |\n|  ⋮  |   |\n\n_Tâche._ Listez par ordre croissant tous les nombres de Fibonacci inférieurs ou égaux à 1000.\n\n_Aide._ Utilisez une CTE (_Common Table Expression_) récursive.\n\n_Contrainte._ Pour que SQLab puisse valider votre requête, vous devrez impérativement l'insérer dans la structure de filtrage suivante :\n\n```sql\nWITH RECURSIVE fib (\n        /* en-tête de votre CTE */\n    )\n    AS (\n        /* corps de votre CTE */\n    )\nSELECT i\nFROM ints\nWHERE i IN (SELECT i from fib)\n```",
+    "statement": "La **suite de Fibonacci** commence par 0 et 1, ensuite chaque terme est la somme des deux précédents :\n\n| Terme | Explication |\n|-------:|:-------:|\n| $0$      | (donné) |\n| $1$      | (donné) |\n| $1$      | $$0 + 1 = 1$$ |\n| $2$      | $$1 + 1 = 2$$ |\n| $3$      | $$1 + 2 = 3$$ |\n| $5$      | $$2 + 3 = 5$$ |\n| $8$      | $$3 + 5 = 8$$ |\n| $13$     | $$5 + 8 = 13$$ |\n|  ⋮  |   |\n\n_Tâche._ Listez par ordre croissant tous les nombres de Fibonacci inférieurs ou égaux à 1000.\n\n_Aide._ Utilisez une CTE (_Common Table Expression_) récursive.\n\n_NB._ Cette suite comportant une répétion, vous ne pouvez pas l'exprimer comme une sous-séquence de la suite des entiers naturels. Ici, exceptionnellement, passez-vous de la table `ints`.",
     "salt": "019",
-    "formula": "salt_019(sum(nn(hash)) OVER ()) AS token",
+    "formula": "salt_019(string_hash('(0)') + count(*) OVER ()) AS token",
     "reward": 10,
+    "tweak": "la concaténation de ces nombres.",
     "solutions": [
       {
-        "query": "WITH RECURSIVE fib(i, J) AS\n    (SELECT 1 AS i\n          , 1 AS J\n\n     UNION ALL\n\n     SELECT J AS i\n                    , i + J AS J\n     FROM fib\n     WHERE J <= 1000 )\nSELECT i\nFROM ints\nWHERE i IN\n        (SELECT i\n         FROM fib)",
+        "query": "WITH RECURSIVE\nfib (a, b) AS (\n    SELECT 0, 1\n\n    UNION ALL\n\n    SELECT b, a + b\n    FROM fib\n    WHERE b <= 1000 )\nSELECT a as n\nFROM fib",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>142617064293148</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>142617064293148</td>\n        </tr>\n</table>\nTotal: 15 rows affected.",
-        "token": "142617064293148"
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>0</td>\n            <td>149114173335496</td>\n        </tr>\n        <tr>\n            <td>1</td>\n            <td>149114173335496</td>\n        </tr>\n</table>\nTotal: 17 rows affected.",
+        "token": "149114173335496"
       }
-    ]
+    ],
+    "tweak_javascript": "result.map(x => x?.n ?? '').join('.') || '7_531_148'"
+  },
+  "148611824478556": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Vous stoppez la récursion une itération trop tard.",
+    "query": "WITH RECURSIVE\nfib (a, b) AS (\n    SELECT 0, 1\n\n    UNION ALL\n\n    SELECT b, a + b\n     FROM fib\n     WHERE a <= 1000 )\nSELECT a as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
+  },
+  "148879872816411": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Le premier terme devrait être 0.",
+    "query": "WITH RECURSIVE\nfib (a, b) AS (\n    SELECT 1, 1\n\n    UNION ALL\n\n    SELECT b, a + b\n     FROM fib\n     WHERE b <= 1000 )\nSELECT a as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
+  },
+  "148669601188638": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Votre séquence semble décalée de 1. Projetez-vous la bonne colonne du résultat de la CTE ?",
+    "query": "WITH RECURSIVE\nfib (a, b) AS (\n    SELECT 0, 1\n\n    UNION ALL\n\n    SELECT b, a + b\n     FROM fib\n     WHERE b <= 1000 )\nSELECT b as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
+  },
+  "148515034955604": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Deux 1 devraient apparaître. Auriez-vous malencontreusement éliminé les redondances du résultat de votre CTE ?",
+    "query": "WITH RECURSIVE\nfib (a, b) AS (\n    SELECT 0, 1\n\n    UNION ALL\n\n    SELECT b, a + b\n    FROM fib\n    WHERE b <= 1000 )\nSELECT n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM ints\nWHERE n in (SELECT a FROM fib)"
+  },
+  "149468789687598": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Vous êtes en train de réinventer les [nombres de « Tribonacci »](https://oeis.org/A001590), une récurrence d'ordre 3 (au lieu de 2 pour Fibonacci). Écrivez une CTE à deux colonnes.",
+    "query": "WITH RECURSIVE\nfib (a, b, c) AS (\n    SELECT 0, 1, 1\n\n    UNION ALL\n\n    SELECT b, b+c, a+b\n    FROM fib\n    WHERE b <= 1000 )\nSELECT a as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
+  },
+  "149210280710509": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Vous êtes en train de réinventer les [nombres de « Tribonacci »](https://oeis.org/A000073), une récurrence d'ordre 3 (au lieu de 2 pour Fibonacci). Écrivez une CTE à deux colonnes.",
+    "query": "WITH RECURSIVE\nfib (a, b, c) AS (\n    SELECT 0, 0, 1\n\n    UNION ALL\n\n    SELECT b, b+c, a+b\n    FROM fib\n    WHERE b <= 1000 )\nSELECT a as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
+  },
+  "149003955203329": {
+    "kind": "hint",
+    "task_number": 14,
+    "text": "Vous êtes en train de réinventer les [nombres de « Tribonacci »](https://oeis.org/A000073), une récurrence d'ordre 3 (au lieu de 2 pour Fibonacci). Écrivez une CTE à deux colonnes.",
+    "query": "WITH RECURSIVE\nfib (a, b, c) AS (\n    SELECT 0, 1, 0\n\n    UNION ALL\n\n    SELECT b, b+c, a+b\n    FROM fib\n    WHERE b <= 1000 )\nSELECT a as n\n     , salt_019(string_hash('{{x}}') + count(*) OVER ()) AS token\nFROM fib"
   },
   "039": {
     "activity_number": 0,
     "kind": "exercise",
-    "task_number": 16,
+    "task_number": 15,
     "section_path": [
       [
         "Entraînement",
@@ -763,18 +779,250 @@
     ],
     "statement": "Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffres (en écriture décimale).\n\n| Exemple | Chiffres | Somme | Propriété | Harshad |\n|---:|:--:|:--:|:--:|:--:|\n| $42$ | $${4, 2}$$ | $6$ | divisible | ✅ |\n| $11$ | $${1, 1}$$ | $2$ | non divisible | ❌ |\n\n_Tâche._ Listez par ordre croissant les nombres de Harshad inférieurs ou égaux à 1000.\n\n_Contrainte._ Utilisez une CTE récursive.",
     "salt": "039",
-    "formula": "salt_039(bit_xor(sum(nn(hash))) OVER ()) AS token",
+    "formula": "salt_039(sum(string_hash('(0)')) OVER ()) AS token",
     "reward": 10,
+    "tweak": "concaténation du nombre de lignes et des vingt premiers n",
     "solutions": [
       {
-        "query": "WITH RECURSIVE digits(i, Q, R, hash) AS\n    (SELECT i\n          , i MOD 10\n                , i DIV 10\n                , hash\n     FROM ints\n\n     UNION ALL\n\n     SELECT i\n                    , R MOD 10\n                          , R DIV 10\n                          , hash\n     FROM digits\n     WHERE R > 0 )\nSELECT i\n--   , group_concat(q SEPARATOR ' ') as digits\nFROM digits\nGROUP BY i\nHAVING i % sum(q) = 0",
+        "intro": "On construit récursivement une table avec tous les chiffres de chaque nombre. Ensuite, on regroupe par nombre. Enfin, on teste la propriété de divisibilité avec la somme des chiffres de chaque nombre.",
+        "query": "WITH RECURSIVE\ndigits (n, q, r) AS\n    (SELECT n\n          , n MOD 10\n          , n DIV 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 0 )\nSELECT n\nFROM digits\nGROUP BY n\nHAVING n MOD sum(q) = 0",
         "columns": [
-          "i"
+          "n"
         ],
-        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>i</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>227239899382463</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>227239899382463</td>\n        </tr>\n</table>\nTotal: 213 rows affected.",
-        "token": "227239899382463"
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>243582352371835</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>243582352371835</td>\n        </tr>\n</table>\nTotal: 213 rows affected.",
+        "token": "243582352371835"
+      },
+      {
+        "intro": "Variante. On peut calculer la somme au fur et à mesure de la récursion au lieu de reparcourir la table après coup. La table construite récursivement associe, à chaque nombre de $d$ chiffres, $d$ sommes intermédiaires. Attention : seule la dernière (`r = 0`) nous intéresse.",
+        "query": "WITH RECURSIVE\ndigits(n, digit_sum, r) AS (\n    SELECT n, n MOD 10, n DIV 10\n    FROM ints\n    \n    UNION ALL\n    \n    SELECT n, digit_sum + (r MOD 10), r DIV 10\n    FROM digits\n    WHERE r > 0\n)\nSELECT n\nFROM digits\nWHERE r = 0 AND n MOD digit_sum = 0",
+        "columns": [
+          "n"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>243582352371835</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>243582352371835</td>\n        </tr>\n</table>\nTotal: 213 rows affected.",
+        "token": "243582352371835"
       }
-    ]
+    ],
+    "tweak_javascript": "[result.length].concat(result.slice(0, 20).map(x => x.n)).join('.')"
+  },
+  "226313462278852": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Il y a quelque chose de louche ! Les opérandes du modulo sont-ils dans le bon sens ? C'est le même que celui de la division entière.",
+    "query": "WITH RECURSIVE digits(n, q, r) AS\n    (SELECT n\n          , n MOD 10\n          , n DIV 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 0 )\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nGROUP BY n\nHAVING sum(q) MOD n = 0"
+  },
+  "165717715346964": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Il semble que vous arrêtiez la récursion trop tôt, ce qui vous fait manquer certains nombres de Harshad, par exemple 10.",
+    "query": "WITH RECURSIVE digits(n, q, r) AS\n    (SELECT n\n          , n MOD 10\n          , n DIV 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 10 )\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nGROUP BY n\nHAVING n MOD sum(q) = 0"
+  },
+  "198102760205823": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Ne regroupez que sur la colonne des entiers cherchés.",
+    "query": "WITH RECURSIVE digits(n, q, r) AS\n    (SELECT n\n          , n MOD 10\n          , n DIV 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 0 )\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nGROUP BY n, q\nHAVING n MOD sum(q) = 0"
+  },
+  "583015109991402": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Ne regroupez que sur la colonne des entiers cherchés.",
+    "query": "WITH RECURSIVE digits(n, q, r) AS\n    (SELECT n\n          , n MOD 10\n          , n DIV 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 0 )\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nGROUP BY n, r\nHAVING n MOD sum(q) = 0"
+  },
+  "189105737194104": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Veillez à la cohérence entre l'ordre des arguments de votre fonction et celui de ses appels.",
+    "query": "WITH RECURSIVE digits(n, q, r) AS\n    (SELECT n\n          , n DIV 10\n          , n MOD 10\n     FROM ints\n\n     UNION ALL\n\n     SELECT n\n          , r MOD 10\n          , r DIV 10\n     FROM digits\n     WHERE r > 0 )\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nGROUP BY n\nHAVING n MOD sum(q) = 0"
+  },
+  "237984121642486": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "Avez-vous une CTE récursive?",
+    "query": "SELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM ints  \nWHERE n MOD (n MOD 10) = 0"
+  },
+  "1076677401390944": {
+    "kind": "hint",
+    "task_number": 15,
+    "text": "La table construite récursivement est correcte, mais attention, elle associe à chaque nombre toutes les sommes intermédiaires de ses chiffres. Seule la dernière nous intéresse.",
+    "query": "WITH RECURSIVE digits(n, digit_sum, r) AS (\n    SELECT n, n MOD 10, n DIV 10\n    FROM ints\n    \n    UNION ALL\n    \n    SELECT n, digit_sum + (r MOD 10), r DIV 10\n    FROM digits\n    WHERE r > 0\n)\nSELECT n\n     , salt_039(sum(string_hash('{{x}}')) OVER ()) AS token\nFROM digits\nWHERE n MOD digit_sum = 0;"
+  },
+  "088": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 16,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Miscellanées",
+        "Dans ces exercices, la liste des 1001 premiers entiers est utilisé comme support de création de tables intéressantes ou amusantes."
+      ],
+      [
+        "FizzBuzz",
+        ""
+      ]
+    ],
+    "statement": "La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où :\n\n- tout multiple de 3 est remplacé par `'Fizz'` ;\n- tout multiple de 5 est remplacé par `'Buzz'` ;\n- tout multiple de 15 est remplacé par `'FizzBuzz'` ;\n- les autres nombres restent inchangés.\n\n| fizzbuzz     |\n|:------------:|\n| `1`          |\n| `2`          |\n| `Fizz`     |\n| `4`          |\n| `Buzz`     |\n| `Fizz`     |\n| `7`          |\n| ⋮            |\n| `14`         \n| `FizzBuzz` |\n| `16`         \n| ⋮            |\n\n\n_Tâche._ Listez par ordre croissant les termes de FizzBuzz jusqu'à 1000.\n\n_Aide._ L'opérateur `CASE` fera ici merveille sous la forme suivante :\n\n```sql\nCASE\n    WHEN condition_1 THEN result_1\n    WHEN condition_2 THEN result_2\n    ...\n    ELSE default_result\nEND\n```",
+    "salt": "088",
+    "formula": "salt_088(string_hash('(0)') + sum(nn(hash)) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "la concaténation des 9e au 16e termes, séparés par des points, en minuscules.",
+    "solutions": [
+      {
+        "query": "SELECT CASE\n           WHEN n MOD 15 = 0 THEN 'FizzBuzz'\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           ELSE n\n       END AS fizzbuzz\nFROM ints\nWHERE n > 0",
+        "columns": [
+          "fizzbuzz"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "360051049043076"
+      },
+      {
+        "intro": "Variante. En générant dynamiquement la chaîne.",
+        "query": "SELECT coalesce(nullif(concat(if(n MOD 3 = 0, 'Fizz', ''), if(n MOD 5 = 0, 'Buzz', '')), ''), n) AS fizzbuzz\nFROM ints\nWHERE n > 0",
+        "columns": [
+          "fizzbuzz"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>fizzbuzz</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>360051049043076</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>360051049043076</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "360051049043076"
+      }
+    ],
+    "tweak_javascript": "(result.slice(8, 16).map(x => x?.fizzbuzz ?? '').join('.') || '').toLowerCase() || '7_531_148'"
+  },
+  "360247014033845": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "La véritable suite FizzBuzz™️ commence à 1.",
+    "query": "SELECT CASE\n           WHEN n MOD 15 = 0 THEN 'FizzBuzz'\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           ELSE n\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
+  },
+  "359749191076977": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "La véritable suite FizzBuzz™️ commence à 1.",
+    "query": "SELECT CASE\n           WHEN n MOD 15 = 0 THEN 'FizzBuzz'\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           ELSE n\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n > 1"
+  },
+  "360186567754554": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
+    "query": "SELECT CASE\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           WHEN n MOD 15 = 0 THEN 'FizzBuzz'\n           ELSE n\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n > 0\nLIMIT 20"
+  },
+  "359943398969027": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5 ?",
+    "query": "SELECT CASE\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 15 = 0 THEN 'FizzBuzz'\n           ELSE n\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n > 0\nLIMIT 20"
+  },
+  "359642314904307": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "Votre suite comporte un terme de trop.",
+    "query": "SELECT CASE\n           WHEN (n + 1) MOD 15 = 0 THEN 'FizzBuzz'\n           WHEN (n + 1) MOD 3 = 0 THEN 'Fizz'\n           WHEN (n + 1) MOD 5 = 0 THEN 'Buzz'\n           ELSE (n + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints"
+  },
+  "359813838431707": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "Vous pouvez éviter d'incrémenter chaque `n` : laissez tomber le premier `n` au lieu du dernier.",
+    "query": "SELECT CASE\n           WHEN (n + 1) MOD 15 = 0 THEN 'FizzBuzz'\n           WHEN (n + 1) MOD 3 = 0 THEN 'Fizz'\n           WHEN (n + 1) MOD 5 = 0 THEN 'Buzz'\n           ELSE (n + 1)\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n < 1000"
+  },
+  "359590657654446": {
+    "kind": "hint",
+    "task_number": 16,
+    "text": "N'insérez pas d'espace dans `'FizzBuzz'`.",
+    "query": "SELECT CASE\n           WHEN n MOD 15 = 0 THEN 'Fizz Buzz'\n           WHEN n MOD 3 = 0 THEN 'Fizz'\n           WHEN n MOD 5 = 0 THEN 'Buzz'\n           ELSE n\n       END AS fizzbuzz\n     , salt_088(string_hash('{{x}}') + sum(nn(hash)) OVER ()) AS token\nFROM ints\nWHERE n > 0"
+  },
+  "078": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 17,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Miscellanées",
+        ""
+      ],
+      [
+        "Vendredis 13",
+        ""
+      ]
+    ],
+    "statement": "Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. Comme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :\n\n> « C'est une preuve supplémentaire de la méchanceté fondamentale de la Volonté, que le treizième jour d'un mois tombe plus souvent un vendredi que tout autre jour de la semaine. La Nature elle-même semble s'être liguée contre nous, nourrissant notre superstition avec une précision mathématique. Quelle cruelle ironie que même le calendrier devienne un instrument de notre souffrance ! »\n\n_Tâche_. Vérifiez cette triste réalité en donnant, pour chaque jour de la semaine (à commencer par le lundi), le nombre de fois où il tombe le 13 du mois dans un cycle grégorien complet (400 ans). Attention : choisissez une année de départ postérieure au début du calendrier grégorien (1582).\n",
+    "salt": "078",
+    "formula": "salt_078(string_hash('(0)') + count(*) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "la concaténation de ces nombres.",
+    "solutions": [
+      {
+        "query": "WITH \nyears AS (\n    SELECT 1583 + n AS year_number\n    FROM ints\n    WHERE n < 400\n),\ndays AS (\n    SELECT n AS day_number\n    FROM ints\n    WHERE n BETWEEN 1 AND 366\n),\ndates AS (\n    SELECT makedate(year_number, day_number) AS D\n    FROM years, days\n)\nSELECT dayname(D) AS day\n     , count(*) AS occurrences\nFROM dates\nWHERE day(D) = 13\nGROUP BY weekday(D)\n       , dayname(D)\nORDER BY weekday(D)",
+        "columns": [
+          "day",
+          "occurrences"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>day</th>\n            <th>occurrences</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>Monday</td>\n            <td>685</td>\n            <td>33460752933766</td>\n        </tr>\n        <tr>\n            <td>Tuesday</td>\n            <td>685</td>\n            <td>33460752933766</td>\n        </tr>\n</table>\nTotal: 7 rows affected.",
+        "token": "33460752933766"
+      },
+      {
+        "intro": "Variante. Même principe, mais en calculant les dates du 13 des 4800 mois qui commencent au 13 d'un mois arbitraire d'une année arbitraire.",
+        "query": "WITH dates AS\n    (SELECT date_add('1583-01-13', INTERVAL A.n + 1000 * B.n MONTH) AS D\n     FROM ints AS A\n     CROSS JOIN ints AS B\n     WHERE A.n < 1000\n         AND A.n + 1000 * B.n < 4800 )\nSELECT dayname(D) AS `day`\n     , count(D) AS `occurrences`\nFROM dates\nGROUP BY weekday(D)\n       , dayname(D)\nORDER BY weekday(D)",
+        "columns": [
+          "day",
+          "occurrences"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>day</th>\n            <th>occurrences</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>Monday</td>\n            <td>685</td>\n            <td>33460752933766</td>\n        </tr>\n        <tr>\n            <td>Tuesday</td>\n            <td>685</td>\n            <td>33460752933766</td>\n        </tr>\n</table>\nTotal: 7 rows affected.",
+        "token": "33460752933766"
+      }
+    ],
+    "tweak_javascript": "result.map(x => x?.occurrences ?? '').join(' ') || '7_531_148'"
+  },
+  "047": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 18,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Miscellanées",
+        ""
+      ],
+      [
+        "Chiffres romains",
+        ""
+      ]
+    ],
+    "statement": "On se donne une table associant une sélection d'entiers à leur représentation en chiffres romains, dans cet ordre :\n\n| Position | Arabe | Romain |\n|---------:|------:|:------:|\n|        1 |  1000 |  M     |\n|        2 |   900 |  CM    |\n|        3 |   500 |  D     |\n|        4 |   400 |  CD    |\n|        5 |   100 |  C     |\n|        6 |    90 |  XC    |\n|        7 |    50 |  L     |\n|        8 |    40 |  XL    |\n|        9 |    10 |  X     |\n|       10 |     9 |  IX    |\n|       11 |     5 |  V     |\n|       12 |     4 |  IV    |\n|       13 |     1 |  I     |\n\nPour convertir un entier $n$ quelconque, on applique l'algorithme suivant (code Python [ici](https://stackoverflow.com/a/47713392/173003)) :\n\n1. Un accumulateur est initialisé à la chaîne vide.\n2. Pour chaque ligne $(a, r)$ de la table d'association :\n    - la division entière de $n$ par $a$ donne un quotient $q$ et un reste $m$ ;\n    - $n$ devient $q$ ;\n    - l'accumulateur est suffixé $m$ fois par $r$.\n3. l'accumulateur contient la représentation désirée.\n\n_Tâche._ Donnez, pour chaque entier de 1 à 1000, sa représentation en chiffres romains.\n\n_Aide._ Vous aurez besoin de deux CTE :\n1. La première construit la table d'association. Utilisez `VALUES`. La colonne `position` sert à rester en complexité linéaire lors de la conversion.\n2. La seconde est récursive, et crée une table avec un certain nombre de colonnes (à déterminer) et dont certaines lignes (à déterminer) contiendront les résultats. Initialisez l'accumulateur à `CAST('' AS CHAR(20))` pour réserver l'espace nécessaire à sa croissance, et utilisez `CONCAT` et `REPEAT` pour le mettre à jour.",
+    "salt": "047",
+    "formula": "salt_047(sum(string_hash('(0)')) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "la concaténation des nombres romains en partant du 11e et par pas de 43",
+    "solutions": [
+      {
+        "query": "WITH RECURSIVE\n\nmap (pos, arabic, roman) AS (\n    SELECT 1, 1000, 'M'\n    UNION ALL SELECT 2, 900, 'CM'\n    UNION ALL SELECT 3, 500, 'D'\n    UNION ALL SELECT 4, 400, 'CD'\n    UNION ALL SELECT 5, 100, 'C'\n    UNION ALL SELECT 6, 90, 'XC'\n    UNION ALL SELECT 7, 50, 'L'\n    UNION ALL SELECT 8, 40, 'XL'\n    UNION ALL SELECT 9, 10, 'X'\n    UNION ALL SELECT 10, 9, 'IX'\n    UNION ALL SELECT 11, 5, 'V'\n    UNION ALL SELECT 12, 4, 'IV'\n    UNION ALL SELECT 13, 1, 'I'\n),\n\nconversion (n, remaining, acc, pos) AS (\n    SELECT n, n, CAST('' AS CHAR(20)), 1\n    FROM ints\n    WHERE n > 0\n    \n    UNION ALL\n    \n    SELECT \n        n,\n        remaining MOD arabic,\n        CONCAT(acc, REPEAT(roman, remaining DIV arabic)),\n        pos + 1\n    FROM conversion\n    JOIN map USING (pos)\n)\n\nSELECT\n    n,\n    acc as roman\nFROM conversion\nWHERE pos = 14",
+        "columns": [
+          "n",
+          "roman"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>roman</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>I</td>\n            <td>393035298143192</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>II</td>\n            <td>393035298143192</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "393035298143192"
+      },
+      {
+        "intro": "Variante. Syntaxe plus moderne, mais moins portable.",
+        "query": "WITH RECURSIVE\n\nmap (pos, arabic, roman) AS (\n    VALUES \n    ROW( 1, 1000, 'M'),\n    ROW( 2,  900, 'CM'),\n    ROW( 3,  500, 'D'),\n    ROW( 4,  400, 'CD'),\n    ROW( 5,  100, 'C'),\n    ROW( 6,   90, 'XC'),\n    ROW( 7,   50, 'L'),\n    ROW( 8,   40, 'XL'),\n    ROW( 9,   10, 'X'),\n    ROW(10,    9, 'IX'),\n    ROW(11,    5, 'V'),\n    ROW(12,    4, 'IV'),\n    ROW(13,    1, 'I')\n),\n\nconversion (n, remaining, acc, pos) AS (\n    SELECT n, n, CAST('' AS CHAR(20)), 1\n    FROM ints\n    WHERE n > 0\n    \n    UNION ALL\n    \n    SELECT \n        n,\n        remaining MOD arabic,\n        CONCAT(acc, REPEAT(roman, remaining DIV arabic)),\n        pos + 1\n    FROM conversion\n    JOIN map USING (pos)\n)\n\nSELECT\n    n,\n    acc as roman\nFROM conversion\nWHERE pos = 14",
+        "columns": [
+          "n",
+          "roman"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>n</th>\n            <th>roman</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>I</td>\n            <td>393035298143192</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>II</td>\n            <td>393035298143192</td>\n        </tr>\n</table>\nTotal: 1000 rows affected.",
+        "token": "393035298143192"
+      }
+    ],
+    "tweak_javascript": "col.roman.slice(10).filter((_, n) => n % 43 === 0).map(x => x.roman).join('.')"
   },
   "db_metadata": {
     "kind": "db_metadata",

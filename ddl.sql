@@ -8,11 +8,11 @@ CREATE DATABASE `ints` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `ints`;
 
 CREATE TABLE `ints` (
-  `i` bigint NOT NULL,
+  `n` bigint NOT NULL,
   `hash` bigint NULL
 ) ENGINE=InnoDB;
 
 ALTER TABLE `ints`
-  ADD PRIMARY KEY (`i`);
+  ADD PRIMARY KEY (`n`);
 
 -- FK

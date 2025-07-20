@@ -13,12 +13,12 @@ config = {
     "source_path": "./ints.ipynb",
     "relational_schema_dir": "./assets/",
     "salt_bound": 100,
-    "reformat_sql": True,
+    "reformat_sql": False,
     "sqlparse_subs": {
         "lowercase_user_names": (r"\bI\b", lambda m: m[0].lower()),
     },
     "metadata": {
-        "version": "1.0.1",
+        "version": "1.1.0",
         "repository": "https://github.com/laowantong/ints",
         "license_name": "CC BY-SA 4.0",
         "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",

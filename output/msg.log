@@ -5,35 +5,56 @@ Exercise 3 (043): "Un entier est **triangulaire** si et seulement s'il peut s'é
     Hint (81063761713588): "On ne cherche pas les nombres qui vérifient l'égalité $n = \\frac{n(n+1)}{2}$ mais ceux qui peuvent s"
     Hint (96800835160244): 'Vous avez oublié le numérateur de la formule.'
     Hint (76118056186574): 'Vous avez oublié le $+ 1$ dans la formule.'
-    Hint (103209978926115): 'Vous ne projetez pas la colonne `i` de la bonne table.'
-Exercise 4 (088): 'La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où\xa0:\n\n- tout '
-    Hint (360247014033845): 'La véritable suite FizzBuzz™️ commence à 1.'
-    Hint (359749191076977): 'La véritable suite FizzBuzz™️ commence à 1.'
-    Hint (360186567754554): "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5\xa0?"
-    Hint (359943398969027): "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5\xa0?"
-    Hint (359642314904307): 'Votre suite comporte un terme de trop.'
-    Hint (359813838431707): "Vous pouvez éviter d'incrémenter chaque `i`\xa0: laissez tomber le premier `i` au lieu du dernier."
-    Hint (359590657654446): "N'insérez pas d'espace dans `'FizzBuzz'`."
-Exercise 5 (010): 'Un entier $n$ est **automorphe** si son carré se termine par $n$ (en écriture décimale).\n\n| Exemple '
-Exercise 6 (032): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
+    Hint (103209978926115): 'Vous ne projetez pas la colonne `n` de la bonne table.'
+Exercise 4 (010): 'Un entier $n$ est **automorphe** si son carré se termine par $n$ (en écriture décimale).\n\n| Exemple '
+Exercise 5 (032): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
     Hint (1230160502988894): 'Supprimez les doublons.'
     Hint (1230160502992190): 'Triez ces nombres par ordre croissant.'
-Exercise 7 (033): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
-Exercise 8 (081): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
-Exercise 9 (082): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
+Exercise 6 (033): "Un entier $c$ est **bicarré** si et seulement s'il peut s'écrire sous la forme $a^2+b^2$ avec $a$ et"
+Exercise 7 (081): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
+Exercise 8 (082): "Un entier est **premier** si et seulement s'il a exactement deux diviseurs entiers (1 et lui-même).\n"
     Hint (156596690231090): '0 et 1 ne sont pas premiers.'
     Hint (156189361184507): "1 n'est pas premier."
-Exercise 10 (062): "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n"
-Exercise 11 (023): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+Exercise 9 (062): "Un entier est **composite** si et seulement s'il a plus de deux diviseurs entiers (1 et lui-même).\n\n"
+Exercise 10 (023): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
     Hint (62621691563930): 'Sommez tous les diviseurs inférieurs à $n$, y compris 1. Le résultat est le même pour les nombres de'
     Hint (14110344140782): "$n$ n'est pas un diviseur strict de lui-même."
-Exercise 12 (024): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
-Exercise 13 (037): 'Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en fac'
-Exercise 14 (009): 'Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une par'
+Exercise 11 (024): "Un entier $n$ est **abondant** si et seulement s'il est inférieur à la somme de ses diviseurs strict"
+Exercise 12 (037): 'Un entier est **sans facteur carré** si et seulement si aucun des nombres de sa décomposition en fac'
+    Hint (836962415998811): 'Vous renvoyez tous les `n`. Ne gardez que ceux que vous ne pouvez mettre en correspondance avec **au'
+    Hint (378179076514973): 'Vous renvoyez tous les entiers de 1 à 1000. Si vous avez utilisé une sous-requête corrélée, vérifiez'
+    Hint (374196928538196): 'Vous renvoyez tous les entiers de 0 à 1000. Si vous avez utilisé une sous-requête corrélée, vérifiez'
+    Hint (446356723589658): 'Vous renvoyez tous les `n` que vous pouvez mettre en correspondance avec au moins un diviseur carré.'
+    Hint (437237875864615): "Excluez zéro\xa0: il n'a pas de décomposition en facteurs premiers."
+Exercise 13 (009): 'Un entier $n$ est un **nombre de Kaprekar** si et seulement si son carré peut être séparé en une par'
     Hint (253974688626775): 'Vérifiez les positions de coupe.'
     Hint (254220120595727): 'La partie gauche peut avoir comme longueur 1.'
     Hint (253352804744747): "Une suite de zéros n'est pas autorisée pour la partie droite."
     Hint (253843891117135): 'Le premier nombre de Kaprekar est 1.'
     Hint (253109520226675): "Une suite de zéros n'est pas autorisée pour la partie droite."
-Exercise 15 (019): 'La **suite de Fibonacci** commence par 0 et 1, puis chaque autre terme est la somme des deux termes '
-Exercise 16 (039): "Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffr"
+Exercise 14 (019): 'La **suite de Fibonacci** commence par 0 et 1, ensuite chaque terme est la somme des deux précédents'
+    Hint (148611824478556): 'Vous stoppez la récursion une itération trop tard.'
+    Hint (148879872816411): 'Le premier terme devrait être 0.'
+    Hint (148669601188638): 'Votre séquence semble décalée de 1. Projetez-vous la bonne colonne du résultat de la CTE\xa0?'
+    Hint (148515034955604): 'Deux 1 devraient apparaître. Auriez-vous malencontreusement éliminé les redondances du résultat de v'
+    Hint (149468789687598): 'Vous êtes en train de réinventer les [nombres de «\xa0Tribonacci\xa0»](https://oeis.org/A001590), une récu'
+    Hint (149210280710509): 'Vous êtes en train de réinventer les [nombres de «\xa0Tribonacci\xa0»](https://oeis.org/A000073), une récu'
+    Hint (149003955203329): 'Vous êtes en train de réinventer les [nombres de «\xa0Tribonacci\xa0»](https://oeis.org/A000073), une récu'
+Exercise 15 (039): "Un entier est un **nombre de Harshad** si et seulement s'il est divisible par la somme de ses chiffr"
+    Hint (226313462278852): "Il y a quelque chose de louche\xa0! Les opérandes du modulo sont-ils dans le bon sens ? C'est le même q"
+    Hint (165717715346964): 'Il semble que vous arrêtiez la récursion trop tôt, ce qui vous fait manquer certains nombres de Hars'
+    Hint (198102760205823): 'Ne regroupez que sur la colonne des entiers cherchés.'
+    Hint (583015109991402): 'Ne regroupez que sur la colonne des entiers cherchés.'
+    Hint (189105737194104): "Veillez à la cohérence entre l'ordre des arguments de votre fonction et celui de ses appels."
+    Hint (237984121642486): 'Avez-vous une CTE récursive?'
+    Hint (1076677401390944): 'La table construite récursivement est correcte, mais attention, elle associe à chaque nombre toutes '
+Exercise 16 (088): 'La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où\xa0:\n\n- tout '
+    Hint (360247014033845): 'La véritable suite FizzBuzz™️ commence à 1.'
+    Hint (359749191076977): 'La véritable suite FizzBuzz™️ commence à 1.'
+    Hint (360186567754554): "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5\xa0?"
+    Hint (359943398969027): "Avez-vous pensé au fait qu'un nombre divisible par 15 l'est également par 4 et 5\xa0?"
+    Hint (359642314904307): 'Votre suite comporte un terme de trop.'
+    Hint (359813838431707): "Vous pouvez éviter d'incrémenter chaque `n`\xa0: laissez tomber le premier `n` au lieu du dernier."
+    Hint (359590657654446): "N'insérez pas d'espace dans `'FizzBuzz'`."
+Exercise 17 (078): 'Pas de bol\xa0: les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. '
+Exercise 18 (047): "On se donne une table associant une sélection d'entiers à leur représentation en chiffres romains, d"

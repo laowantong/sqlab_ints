@@ -56,5 +56,6 @@ Exercise 16 (088): 'La suite **FizzBuzz** est une transformation des entiers nat
     Hint (359642314904307): 'Votre suite comporte un terme de trop.'
     Hint (359813838431707): "Vous pouvez éviter d'incrémenter chaque `n`\xa0: laissez tomber le premier `n` au lieu du dernier."
     Hint (359590657654446): "N'insérez pas d'espace dans `'FizzBuzz'`."
-Exercise 17 (078): 'Pas de bol\xa0: les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. '
+Exercise 17 (078): 'Pas de bol\xa0: les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc.\n'
 Exercise 18 (047): "On se donne une table associant une sélection d'entiers à leur représentation en chiffres romains, d"
+Exercise 19 (020): "Un tapis roulant range une suite d'entiers dans des conteneurs de capacité fixe $K$.\n\n![](assets/int"

@@ -30,7 +30,9 @@
   Énoncé complet : 039. Solution : 243582352371835.
 - **Exercice 16**. La suite **FizzBuzz** est une transformation des entiers naturels strictement positifs où :  
   Énoncé complet : 088. Solution : 360051049043076.
-- **Exercice 17**. Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. Comme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :  
+- **Exercice 17**. Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc.  
   Énoncé complet : 078. Solution : 33460752933766.
 - **Exercice 18**. On se donne une table associant une sélection d'entiers à leur représentation en chiffres romains, dans cet ordre :  
   Énoncé complet : 047. Solution : 393035298143192.
+- **Exercice 19**. Un tapis roulant range une suite d'entiers dans des conteneurs de capacité fixe $K$.  
+  Énoncé complet : 020. Solution : 24528728837243.

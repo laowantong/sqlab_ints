@@ -689,12 +689,15 @@ WHERE n > 0
 
 **Token.** 078.
 
-Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. Comme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :
+Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc.
+
+Comme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :
 
 > « C'est une preuve supplémentaire de la méchanceté fondamentale de la Volonté, que le treizième jour d'un mois tombe plus souvent un vendredi que tout autre jour de la semaine. La Nature elle-même semble s'être liguée contre nous, nourrissant notre superstition avec une précision mathématique. Quelle cruelle ironie que même le calendrier devienne un instrument de notre souffrance ! »
 
-_Tâche_. Vérifiez cette triste réalité en donnant, pour chaque jour de la semaine (à commencer par le lundi), le nombre de fois où il tombe le 13 du mois dans un cycle grégorien complet (400 ans). Attention : choisissez une année de départ postérieure au début du calendrier grégorien (1582).
+_Tâche_. Confirmez cette malédiction en donnant, pour chaque jour de la semaine (à commencer par le lundi), le nombre de fois où il tombe le 13 du mois dans un cycle grégorien complet (400 ans).
 
+_Avertissement_. Choisissez une année de départ postérieure au début du calendrier grégorien (1582).
 
 **Formule** (remplacez (0) par la concaténation de ces nombres.). `salt_078(string_hash('(0)') + count(*) OVER ()) AS token`
 
@@ -864,5 +867,51 @@ SELECT
     acc as roman
 FROM conversion
 WHERE pos = 14
+```
+
+### Exercice 19
+
+**Token.** 020.
+
+Un tapis roulant range une suite d'entiers dans des conteneurs de capacité fixe $K$.
+
+![](assets/int-bins.svg)
+
+L'ordre de rangement est imposé, et la somme des entiers placés dans un conteneur ne peut excéder $K$. Voici un exemple du résultat attendu avec $K=20$ pour les entiers de 1 à 10 :
+
+
+| conteneur | mini | maxi | total |
+|----------:|-----:|-----:|------:|
+| 1 | 1 | 5 | 15 |
+| 2 | 6 | 7 | 13 |
+| 3 | 8 | 9 | 17 |
+| 4 | 10 | 10 | 10 |
+
+_Tâche._ Prenez les entiers de 1 à 1000 par ordre croissant et répartissez-les dans des conteneurs de capacité 2000. N'affichez pas les contenus _in extenso_, mais donnez juste leurs bornes `mini` et `maxi` sur deux colonnes.
+
+_Aide._ Utilisez une CTE récursive. Ici, à nouveau, vous n'avez pas besoin de la table `ints`.
+
+_NB._ Du fait de la contrainte d'ordonnancement, ceci n'est **pas** le [problème du Bin Packing](https://fr.wikipedia.org/wiki/Problème_de_bin_packing) (dont une solution optimale serait : [1, 9, 10 ], [2, 3, 7, 8] et [1, 2, 4, 5, 6]).
+
+**Formule** (remplacez (0) par la concaténation des sommes des colonnes `mini`, `maxi` et `total`). `salt_020(bit_xor(string_hash('(0)')) OVER ()) AS token`
+
+```sql
+WITH RECURSIVE cte (bin, running_sum, i) AS (
+  SELECT 1, 1, 1
+  UNION ALL
+  SELECT
+    CASE WHEN running_sum + i < 2000 THEN bin ELSE bin + 1 END,
+    CASE WHEN running_sum + i < 2000 THEN running_sum + i+1 ELSE i+1 END,
+    i+1
+  FROM cte
+  WHERE i < 1000
+)
+SELECT
+    bin,
+    min(i) as mini,
+    max(i) as maxi,
+    max(running_sum) as total
+FROM cte
+GROUP BY 1
 ```
 

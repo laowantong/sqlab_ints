@@ -682,5 +682,14 @@
     "tweak": "col.roman.slice(10).filter((_, n) => n % 43 === 0).map(x => x.roman).join('.')",
     "kind": "solution",
     "token": "393035298143192"
+  },
+  {
+    "id": "0-19-0",
+    "query": "WITH RECURSIVE cte (bin, running_sum, i) AS ( SELECT 1, 1, 1 UNION ALL SELECT CASE WHEN running_sum + i < 2000 THEN bin ELSE bin + 1 END, CASE WHEN running_sum + i < 2000 THEN running_sum + i+1 ELSE i+1 END, i+1 FROM cte WHERE i < 1000 ) SELECT bin, min(i) as mini, max(i) as maxi, max(running_sum) as total FROM cte GROUP BY 1",
+    "formula": "salt_020(bit_xor(string_hash('(0)')) OVER ()) AS token",
+    "columns": [ "bin", "mini", "maxi", "total" ],
+    "tweak": "(result.reduce((sum, x) => sum + Number(x?.mini ?? 0), 0).toString() + result.reduce((sum, x) => sum + Number(x?.maxi ?? 0), 0).toString() + result.reduce((sum, x) => sum + Number(x?.total ?? 0), 0).toString()) || '7_531_148'",
+    "kind": "solution",
+    "token": "24528728837243"
   }
 ]

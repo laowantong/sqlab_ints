@@ -6,11 +6,11 @@
     "section_path": [
       [
         "Entraînement",
-        "Qui pourrait croire qu'une simple liste d'entiers se prête à une grande variété de techniques SQL ? Manipulation de nombres (bien sûr) et de chaînes de caractères, expressions conditionnelles, jointures internes et externes, auto-jointures, sous-requêtes (corrélées ou non), conditions complexes, agrégations, regroupements, CTE (récursives ou non), cette série fait appel à de nombreuses notions fondamentales ou plus avancées.\n\nLa plupart de ces exercices demandent un très bon niveau de SQL. Cependant, les notions de théorie des nombres mobilisées restent du niveau lycée (opérateurs arithmétiques, diviseurs d'un nombre, décomposition en facteurs premiers)."
+        "Croyez-le ou non : une simple liste d'entiers, c'est tout ce qu'il faut pour pousser SQL dans ses derniers retranchements.\n\nAu programme : tripatouillage de nombres (bien sûr) et de chaînes de caractères, conditions en pagaille, jointures dans tous les sens, sous-requêtes plus ou moins tordues, regroupements des familles, CTE sans tabous, agrégats pas toujours ragoutants… Bref, une plongée vertigineuse dans les profondeurs du langage, dont vous ne ressortirez pas… entier !\n\nVous l'avez compris : cette série demande quand même une certaine maîtrise de SQL. Par contre, côté maths, pas de panique : on reste niveau collège — opérateurs arithmétiques, diviseurs, facteurs premiers, rien de foufou.\n\nAlors, qu'attendez-vous ? 1, 2, 3, comptez !"
       ],
       [
         "Suites numériques",
-        "Filtrez une liste d'entiers pour la réduire aux premiers termes de suites célèbres."
+        "Filtrez une liste d'entiers pour la réduire aux premiers termes de suites bien connues."
       ],
       [
         "Carrés parfaits",
@@ -856,8 +856,8 @@
         ""
       ],
       [
-        "Miscellanées",
-        "Dans ces exercices, la liste des 1001 premiers entiers est utilisé comme support de création de tables intéressantes ou amusantes."
+        "Mélanges",
+        "Utilisez une liste d'entiers comme support de création de tables intéressantes ou amusantes."
       ],
       [
         "FizzBuzz",
@@ -942,15 +942,15 @@
         ""
       ],
       [
-        "Miscellanées",
+        "Mélanges",
         ""
       ],
       [
-        "Vendredis 13",
+        "Prévalence comparée des vendredis 13",
         ""
       ]
     ],
-    "statement": "Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc. Comme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :\n\n> « C'est une preuve supplémentaire de la méchanceté fondamentale de la Volonté, que le treizième jour d'un mois tombe plus souvent un vendredi que tout autre jour de la semaine. La Nature elle-même semble s'être liguée contre nous, nourrissant notre superstition avec une précision mathématique. Quelle cruelle ironie que même le calendrier devienne un instrument de notre souffrance ! »\n\n_Tâche_. Vérifiez cette triste réalité en donnant, pour chaque jour de la semaine (à commencer par le lundi), le nombre de fois où il tombe le 13 du mois dans un cycle grégorien complet (400 ans). Attention : choisissez une année de départ postérieure au début du calendrier grégorien (1582).\n",
+    "statement": "Pas de bol : les vendredis 13 sont comparativement plus nombreux que les lundis 13, mardis 13, etc.\n\nComme le notait déjà Arthur Schopenhauer ([Parerga und Paralipomena](https://www.youtube.com/watch?v=dQw4w9WgXcQ), Band II, Kapitel XXXI: _Zur Metaphysik des Aberglaubens_, § 394. Erste Ausgabe, A. W. Hayn, Berlin, 1851, S. 663) :\n\n> « C'est une preuve supplémentaire de la méchanceté fondamentale de la Volonté, que le treizième jour d'un mois tombe plus souvent un vendredi que tout autre jour de la semaine. La Nature elle-même semble s'être liguée contre nous, nourrissant notre superstition avec une précision mathématique. Quelle cruelle ironie que même le calendrier devienne un instrument de notre souffrance ! »\n\n_Tâche_. Confirmez cette malédiction en donnant, pour chaque jour de la semaine (à commencer par le lundi), le nombre de fois où il tombe le 13 du mois dans un cycle grégorien complet (400 ans).\n\n_Avertissement_. Choisissez une année de départ postérieure au début du calendrier grégorien (1582).",
     "salt": "078",
     "formula": "salt_078(string_hash('(0)') + count(*) OVER ()) AS token",
     "reward": 10,
@@ -988,11 +988,11 @@
         ""
       ],
       [
-        "Miscellanées",
+        "Mélanges",
         ""
       ],
       [
-        "Chiffres romains",
+        "Conversion en chiffres romains",
         ""
       ]
     ],
@@ -1024,9 +1024,47 @@
     ],
     "tweak_javascript": "col.roman.slice(10).filter((_, n) => n % 43 === 0).map(x => x.roman).join('.')"
   },
+  "020": {
+    "activity_number": 0,
+    "kind": "exercise",
+    "task_number": 19,
+    "section_path": [
+      [
+        "Entraînement",
+        ""
+      ],
+      [
+        "Mélanges",
+        ""
+      ],
+      [
+        "Convoyeur d'entiers",
+        ""
+      ]
+    ],
+    "statement": "Un tapis roulant range une suite d'entiers dans des conteneurs de capacité fixe $K$.\n\n![](assets/int-bins.svg)\n\nL'ordre de rangement est imposé, et la somme des entiers placés dans un conteneur ne peut excéder $K$. Voici un exemple du résultat attendu avec $K=20$ pour les entiers de 1 à 10 :\n\n\n| conteneur | mini | maxi | total |\n|----------:|-----:|-----:|------:|\n| 1 | 1 | 5 | 15 |\n| 2 | 6 | 7 | 13 |\n| 3 | 8 | 9 | 17 |\n| 4 | 10 | 10 | 10 |\n\n_Tâche._ Prenez les entiers de 1 à 1000 par ordre croissant et répartissez-les dans des conteneurs de capacité 2000. N'affichez pas les contenus _in extenso_, mais donnez juste leurs bornes `mini` et `maxi` sur deux colonnes.\n\n_Aide._ Utilisez une CTE récursive. Ici, à nouveau, vous n'avez pas besoin de la table `ints`.\n\n_NB._ Du fait de la contrainte d'ordonnancement, ceci n'est **pas** le [problème du Bin Packing](https://fr.wikipedia.org/wiki/Problème_de_bin_packing) (dont une solution optimale serait : [1, 9, 10 ], [2, 3, 7, 8] et [1, 2, 4, 5, 6]).",
+    "salt": "020",
+    "formula": "salt_020(bit_xor(string_hash('(0)')) OVER ()) AS token",
+    "reward": 10,
+    "tweak": "la concaténation des sommes des colonnes `mini`, `maxi` et `total`",
+    "solutions": [
+      {
+        "query": "WITH RECURSIVE cte (bin, running_sum, i) AS (\n  SELECT 1, 1, 1\n  UNION ALL\n  SELECT\n    CASE WHEN running_sum + i < 2000 THEN bin ELSE bin + 1 END,\n    CASE WHEN running_sum + i < 2000 THEN running_sum + i+1 ELSE i+1 END,\n    i+1\n  FROM cte\n  WHERE i < 1000\n)\nSELECT\n    bin,\n    min(i) as mini,\n    max(i) as maxi,\n    max(running_sum) as total\nFROM cte\nGROUP BY 1",
+        "columns": [
+          "bin",
+          "mini",
+          "maxi",
+          "total"
+        ],
+        "result_head": "<table>\n    <thead>\n        <tr>\n            <th>bin</th>\n            <th>mini</th>\n            <th>maxi</th>\n            <th>total</th>\n            <th>token</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr>\n            <td>1</td>\n            <td>1</td>\n            <td>62</td>\n            <td>1953</td>\n            <td>24528728837243</td>\n        </tr>\n        <tr>\n            <td>2</td>\n            <td>63</td>\n            <td>88</td>\n            <td>1963</td>\n            <td>24528728837243</td>\n        </tr>\n</table>\nTotal: 291 rows affected.",
+        "token": "24528728837243"
+      }
+    ],
+    "tweak_javascript": "(result.reduce((sum, x) => sum + Number(x?.mini ?? 0), 0).toString() + result.reduce((sum, x) => sum + Number(x?.maxi ?? 0), 0).toString() + result.reduce((sum, x) => sum + Number(x?.total ?? 0), 0).toString()) || '7_531_148'"
+  },
   "db_metadata": {
     "kind": "db_metadata",
-    "title": "Entiers naturels",
-    "pitch": "Une seule table, une seule colonne : les entiers naturels de 0 à 1000."
+    "title": "Comptes des mille et un n",
+    "pitch": "Une table, une colonne : les entiers de 0 à 1000."
   }
 }

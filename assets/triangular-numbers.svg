@@ -1,73 +1,72 @@
-<svg viewBox="45 80 160 70" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      .number { font-family: Arial; font-size: 10px; font-weight:bold }
-      .dot { r: 5 }
-      .layer1 { fill: #ff6b6b; }
-      .layer2 { fill: #feca57; }
-      .layer3 { fill: #48dbfb; }
-      .layer4 { fill: #1dd1a1; }
-      .layer5 { fill: #ff9ff3; }
-      .layer6 { fill: #8b5cf6; }
-    </style>
-  </defs>
+<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            .number { font-family: Arial; font-size: 10px; font-weight:bold }
+            .layer1 { fill: #ff6b6b; }
+            .layer2 { fill: #feca57; }
+            .layer3 { fill: #48dbfb; }
+            .layer4 { fill: #1dd1a1; }
+            .layer5 { fill: #ff9ff3; }
+            .layer6 { fill: #8b5cf6; }
+        </style>
+    </defs>
 
-  <rect x="47" y="48" width="120" height="100" fill="ivory" stroke="DarkGray" stroke-width="0.2" />
+    <rect x="1" y="1" width="119" height="99" fill="ivory" stroke="DarkGray" stroke-width="0.2" />
 
-  <!-- Layer 1: 1² = 1 dot -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;1" dur="1s" fill="freeze"/>
-    <text x="65" y="64" text-anchor="end" class="number layer1">1</text>
-    <circle cx="80" cy="60" class="dot layer1"/>
-  </g>
-  
-  <!-- Layer 2: Add 3 dots for 2² -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;0;1" begin="1s" dur="1s" fill="freeze"/>
-    <text x="65" y="79" text-anchor="end" class="number layer2">3</text>
-    <circle cx="80" cy="75" class="dot layer2"/>
-    <circle cx="95" cy="75" class="dot layer2"/>
-  </g>
-  
-  <!-- Layer 3: Add 5 dots for 3² -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;0;1" begin="2s" dur="1s" fill="freeze"/>
-    <text x="65" y="94" text-anchor="end" class="number layer3">6</text>
-    <circle cx="110" cy="90" class="dot layer3"/>
-    <circle cx="95" cy="90" class="dot layer3"/>
-    <circle cx="80" cy="90" class="dot layer3"/>
-  </g>
-  
-  <!-- Layer 4: Add 7 dots for 4² -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;0;1" begin="3s" dur="1s" fill="freeze"/>
-    <text x="65" y="109" text-anchor="end" class="number layer4">10</text>
-    <circle cx="125" cy="105" class="dot layer4"/>
-    <circle cx="110" cy="105" class="dot layer4"/>
-    <circle cx="95" cy="105" class="dot layer4"/>
-    <circle cx="80" cy="105" class="dot layer4"/>
-  </g>
-  
-  <!-- Layer 5: Add 9 dots for 5² -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;0;1" begin="4s" dur="1s" fill="freeze"/>
-    <text x="65" y="124" text-anchor="end" class="number layer5">15</text>
-    <circle cx="140" cy="120" class="dot layer5"/>
-    <circle cx="125" cy="120" class="dot layer5"/>
-    <circle cx="110" cy="120" class="dot layer5"/>
-    <circle cx="95" cy="120" class="dot layer5"/>
-    <circle cx="80" cy="120" class="dot layer5"/>
-  </g>
-  
-  <!-- Layer 6: Add 11 dots for 6² -->
-  <g opacity="0">
-    <animate attributeName="opacity" values="0;0;1" begin="5s" dur="1s" fill="freeze"/>
-    <text x="65" y="139" text-anchor="end" class="number layer6">21</text>
-    <circle cx="155" cy="135" class="dot layer6"/>
-    <circle cx="140" cy="135" class="dot layer6"/>
-    <circle cx="125" cy="135" class="dot layer6"/>
-    <circle cx="110" cy="135" class="dot layer6"/>
-    <circle cx="95" cy="135" class="dot layer6"/>
-    <circle cx="80" cy="135" class="dot layer6"/>
-  </g>
+    <!-- Layer 1: 1² = 1 dot -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;1" dur="1s" fill="freeze"/>
+        <text x="18" y="16" text-anchor="end" class="number layer1">1</text>
+        <circle cx="30" cy="12" r="5" class="layer1"/>
+    </g>
+    
+    <!-- Layer 2: Add 2 dots -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1" begin="1s" dur="1s" fill="freeze"/>
+        <text x="18" y="31" text-anchor="end" class="number layer2">3</text>
+        <circle cx="30" cy="27" r="5" class="layer2"/>
+        <circle cx="45" cy="27" r="5" class="layer2"/>
+    </g>
+    
+    <!-- Layer 3: Add 3 dots -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1" begin="2s" dur="1s" fill="freeze"/>
+        <text x="18" y="46" text-anchor="end" class="number layer3">6</text>
+        <circle cx="60" cy="42" r="5" class="layer3"/>
+        <circle cx="45" cy="42" r="5" class="layer3"/>
+        <circle cx="30" cy="42" r="5" class="layer3"/>
+    </g>
+    
+    <!-- Layer 4: Add 4 dots -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1" begin="3s" dur="1s" fill="freeze"/>
+        <text x="18" y="61" text-anchor="end" class="number layer4">10</text>
+        <circle cx="75" cy="57" r="5" class="layer4"/>
+        <circle cx="60" cy="57" r="5" class="layer4"/>
+        <circle cx="45" cy="57" r="5" class="layer4"/>
+        <circle cx="30" cy="57" r="5" class="layer4"/>
+    </g>
+    
+    <!-- Layer 5: Add 5 dots -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1" begin="4s" dur="1s" fill="freeze"/>
+        <text x="18" y="76" text-anchor="end" class="number layer5">15</text>
+        <circle cx="90" cy="72" r="5" class="layer5"/>
+        <circle cx="75" cy="72" r="5" class="layer5"/>
+        <circle cx="60" cy="72" r="5" class="layer5"/>
+        <circle cx="45" cy="72" r="5" class="layer5"/>
+        <circle cx="30" cy="72" r="5" class="layer5"/>
+    </g>
+    
+    <!-- Layer 6: Add 6 dots -->
+    <g opacity="0">
+        <animate attributeName="opacity" values="0;0;1" begin="5s" dur="1s" fill="freeze"/>
+        <text x="18" y="91" text-anchor="end" class="number layer6">21</text>
+        <circle cx="105" cy="87" r="5" class="layer6"/>
+        <circle cx="90" cy="87" r="5" class="layer6"/>
+        <circle cx="75" cy="87" r="5" class="layer6"/>
+        <circle cx="60" cy="87" r="5" class="layer6"/>
+        <circle cx="45" cy="87" r="5" class="layer6"/>
+        <circle cx="30" cy="87" r="5" class="layer6"/>
+    </g>
 </svg>

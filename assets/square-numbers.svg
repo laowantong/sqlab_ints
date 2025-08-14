@@ -23,7 +23,7 @@
   <!-- Layer 2: Add 3 dots for 2² -->
   <g opacity="0">
     <animate attributeName="opacity" values="0;0;1" begin="1s" dur="1s" fill="freeze"/>
-    <text x="18" y="31" text-anchor="end" class="number layer2">3</text>
+    <text x="18" y="31" text-anchor="end" class="number layer2">4</text>
     <circle cx="45" cy="12" r="5" class="layer2"/>
     <circle cx="30" cy="27" r="5" class="layer2"/>
     <circle cx="45" cy="27" r="5" class="layer2"/>
